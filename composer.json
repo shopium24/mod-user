@@ -1,25 +1,24 @@
 {
-    "name": "panix/mod-user",
+    "name": "shopium24/mod-user",
     "description": "Module user",
-    "keywords": ["pixelion-cms", "module", "user"],
-    "homepage": "https://github.com/andrtechno/mod-user",
+    "keywords": [ "module", "user"],
+    "homepage": "https://github.com/shopium24/mod-user",
     "type": "yii2-extension",
     "license": "MIT",
     "minimum-stability": "dev",
     "authors": [
         {
-            "name": "PIXELION CMS",
-            "email": "dev@pixelion.com.ua",
-            "homepage": "https://pixelion.com.ua"
+            "name": "Shopium24",
+            "email": "dev@shopium24.com",
+            "homepage": "https://shopium24.com"
         }
     ],
     "require": {
-        "panix/engine": "*",
-        "yiisoft/yii2-authclient": "~2.1.0"
+        "panix/engine": "*"
     },
     "autoload": {
         "psr-4": {
-            "panix\\mod\\user\\": ""
+            "shopium24\\mod\\user\\": ""
         }
     }
 }
