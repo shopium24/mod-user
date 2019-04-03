@@ -1,6 +1,6 @@
 <?php
 
-namespace shopium24\mod\user\migrations;
+
 
 
 use yii\db\Schema;
@@ -8,9 +8,9 @@ use yii\db\Migration;
 use shopium24\mod\user\models\User;
 use shopium24\mod\user\models\Role;
 
-class m150214_044831_init_user extends Migration {
+class m150214_044331_init_user extends Migration {
 
-    public function safeUp() {
+    public function up() {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
@@ -67,7 +67,21 @@ class m150214_044831_init_user extends Migration {
             'provider_attributes' => Schema::TYPE_TEXT . ' not null',
             'create_time' => Schema::TYPE_TIMESTAMP . ' null default null',
             'update_time' => Schema::TYPE_TIMESTAMP . ' null default null'
-                ], $tableOptions);
+        ], $tableOptions);
+
+
+
+        $this->createTable('{{%user_shop}}', [
+            'id' => $this->primaryKey()->unsigned(),
+            'uid' => $this->integer()->unsigned()->notNull(),
+            'date_create' => $this->timestamp()->notNull(),
+            'expired' => $this->timestamp()->notNull(),
+            'domain' => $this->string(150)->notNull(),
+            'subdomain' => $this->string(150)->notNull(),
+            'plan' => $this->string(150),
+        ]);
+        $this->createIndex('uid', '{{%user_shop}}', 'uid', 0);
+
 
         // add indexes for performance optimization
         $this->createIndex('{{%user_email}}', '{{%user}}', 'email', true);
@@ -94,9 +108,9 @@ class m150214_044831_init_user extends Migration {
         $this->batchInsert('{{%user}}', $columns, [
             [
                 Role::ROLE_ADMIN,
-                'neo@neo.com',
-                'neo',
-                '$2y$13$dyVw4WkZGkABf2UrGWrhHO4ZmVBv.K4puhOL59Y9jQhIdj63TlV.O',
+                'dev@pixelion.com.ua',
+                'admin',
+                '$2y$13$VCTF0TcDFSb/1LkfKzR5uOAiQJIztPcBWVKMd/3VvIBUy.6sSAPvq',
                 User::STATUS_ACTIVE,
                 date('Y-m-d H:i:s'),
                 $security->generateRandomString(),
@@ -111,8 +125,9 @@ class m150214_044831_init_user extends Migration {
         ]);
     }
 
-    public function safeDown() {
+    public function down() {
         // drop tables in reverse order (for foreign key constraints)
+        $this->dropTable('{{%user_shop}}');
         $this->dropTable('{{%user_auth}}');
         $this->dropTable('{{%user_profile}}');
         $this->dropTable('{{%user_key}}');

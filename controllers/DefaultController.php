@@ -6,9 +6,8 @@ use Yii;
 use yii\web\Controller;
 use yii\web\Response;
 
-use yii\filters\VerbFilter;
 use yii\widgets\ActiveForm;
-use shopium24\mod\rbac\filters\AccessControl;
+use panix\mod\rbac\filters\AccessControl;
 /**
  * Default controller for User module
  */
