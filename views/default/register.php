@@ -6,8 +6,8 @@ use yii\widgets\ActiveForm;
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
- * @var panix\mod\user\models\User $user
- * @var panix\mod\user\models\User $profile
+ * @var shopium24\mod\user\models\User $user
+ * @var shopium24\mod\user\models\User $profile
  * @var string $userDisplayName
  */
 

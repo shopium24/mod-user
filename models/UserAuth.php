@@ -1,6 +1,6 @@
 <?php
 
-namespace panix\mod\user\models;
+namespace shopium24\mod\user\models;
 
 use Yii;
 use yii\db\ActiveRecord;
