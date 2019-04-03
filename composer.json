@@ -1,0 +1,25 @@
+{
+    "name": "panix/mod-user",
+    "description": "Module user",
+    "keywords": ["pixelion-cms", "module", "user"],
+    "homepage": "https://github.com/andrtechno/mod-user",
+    "type": "yii2-extension",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "PIXELION CMS",
+            "email": "dev@pixelion.com.ua",
+            "homepage": "https://pixelion.com.ua"
+        }
+    ],
+    "require": {
+        "panix/engine": "*",
+        "yiisoft/yii2-authclient": "~2.1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "panix\\mod\\user\\": ""
+        }
+    }
+}
