@@ -2,7 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use yii\helpers\ArrayHelper;
+use shopium24\mod\plans\models\Plans;
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
@@ -45,6 +46,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php if (Yii::$app->getModule("user")->requireUsername): ?>
             <?= $form->field($user, 'username') ?>
         <?php endif; ?>
+        <?=
+
+        $form->field($user, 'plan')->dropDownList(ArrayHelper::map(Plans::find()->all(), 'id', 'name'), []);
+        ?>
 
         <?= $form->field($user, 'newPassword')->passwordInput() ?>
 
