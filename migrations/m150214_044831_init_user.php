@@ -1,12 +1,12 @@
 <?php
 
-namespace panix\mod\user\migrations;
+namespace shopium24\mod\user\migrations;
 
 
 use yii\db\Schema;
 use yii\db\Migration;
-use panix\mod\user\models\User;
-use panix\mod\user\models\Role;
+use shopium24\mod\user\models\User;
+use shopium24\mod\user\models\Role;
 
 class m150214_044831_init_user extends Migration {
 

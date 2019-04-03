@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
- * @var panix\mod\user\models\search\UserSearch $model
+ * @var shopium24\mod\user\models\search\UserSearch $model
  * @var yii\widgets\ActiveForm $form
  */
 ?>

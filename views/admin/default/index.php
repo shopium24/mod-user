@@ -10,9 +10,9 @@ $role = Yii::$app->getModule("user")->model("Role");
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
- * @var panix\mod\user\models\search\UserSearch $searchModel
- * @var panix\mod\user\models\User $user
- * @var panix\mod\user\models\Role $role
+ * @var shopium24\mod\user\models\search\UserSearch $searchModel
+ * @var shopium24\mod\user\models\User $user
+ * @var shopium24\mod\user\models\Role $role
  */
 $this->title = Yii::t('user/default', 'Users');
 $this->params['breadcrumbs'][] = $this->title;

@@ -1,14 +1,14 @@
 <?php
 
-namespace panix\mod\user\models\search;
+namespace shopium24\mod\user\models\search;
 
 use Yii;
 use yii\base\Model;
 use panix\engine\data\ActiveDataProvider;
-use panix\mod\user\models\User;
+use shopium24\mod\user\models\User;
 
 /**
- * UserSearch represents the model behind the search form about `panix\mod\user\models\User`.
+ * UserSearch represents the model behind the search form about `shopium24\mod\user\models\User`.
  */
 class UserSearch extends User {
 
