@@ -30,7 +30,7 @@ use ReflectionClass;
  * @property string    $ban_time
  * @property string    $ban_reason
  *
- * @property Profile   $profile
+ * @property Sites   $sites
  * @property Role      $role
  * @property UserKey[] $userKeys
  * @property UserAuth[] $userAuths
@@ -80,7 +80,7 @@ class User extends ActiveRecord implements IdentityInterface {
         return "{{%user}}";
     }
     public function getProfileUrl() {
-        return ['/user/profule/view', 'id' => $this->id];
+        return ['/user/profile/view', 'id' => $this->id];
     }
     /**
      * @inheritdoc
@@ -177,23 +177,11 @@ class User extends ActiveRecord implements IdentityInterface {
     }
 
     /**
-     * Stick with 1 user:1 profile
-     *
      * @return \yii\db\ActiveQuery
      */
-    /*
-      public function getProfiles()
-      {
-      return $this->hasMany(Profile::className(), ['user_id' => 'id']);
-      }
-     */
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getProfile() {
-        $profile = Yii::$app->getModule("user")->model("Profile");
-        return $this->hasOne($profile::className(), ['user_id' => 'id']);
+    public function getSite() {
+        $site = Yii::$app->getModule("user")->model("Sites");
+        return $this->hasOne($site::className(), ['user_id' => 'id']);
     }
 
     /**
@@ -205,7 +193,7 @@ class User extends ActiveRecord implements IdentityInterface {
     }
     
     public function getSession() {
-        return $this->hasOne(SessionUser::className(), ['user_id' => 'id']);
+        return $this->hasOne(SessionUser::class, ['user_id' => 'id']);
     }
 
     /**

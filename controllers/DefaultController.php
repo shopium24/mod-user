@@ -80,7 +80,7 @@ class DefaultController extends Controller {
     public function actionRegister() {
         // set up new user/profile objects
         $user = Yii::$app->getModule("user")->model("User", ["scenario" => "register"]);
-        $profile = Yii::$app->getModule("user")->model("Profile");
+        $profile = Yii::$app->getModule("user")->model("Sites");
 
         // load post data
         $post = Yii::$app->request->post();

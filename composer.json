@@ -1,7 +1,7 @@
 {
     "name": "shopium24/mod-user",
     "description": "Module user",
-    "keywords": ["pixelion-cms", "module", "user"],
+    "keywords": ["module", "user"],
     "homepage": "https://github.com/shopium24/mod-user",
     "type": "yii2-extension",
     "license": "MIT",

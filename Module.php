@@ -225,7 +225,7 @@ class Module extends WebModule implements BootstrapInterface
     {
         return [
             'User' => 'shopium24\mod\user\models\User',
-            'Profile' => 'shopium24\mod\user\models\Profile',
+            'Sites' => 'shopium24\mod\user\models\Sites',
             'Role' => 'shopium24\mod\user\models\Role',
             'UserKey' => 'shopium24\mod\user\models\UserKey',
             'UserAuth' => 'shopium24\mod\user\models\UserAuth',
