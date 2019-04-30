@@ -1,12 +1,12 @@
 <?php
 
-namespace shopium24\mod\user\controllers\admin;
+namespace panix\mod\user\controllers\admin;
 
 use Yii;
-use shopium24\mod\user\models\User;
-use shopium24\mod\user\models\search\UserSearch;
-use shopium24\mod\user\models\UserKey;
-use shopium24\mod\user\models\UserAuth;
+use panix\mod\user\models\User;
+use panix\mod\user\models\search\UserSearch;
+use panix\mod\user\models\UserKey;
+use panix\mod\user\models\UserAuth;
 use panix\engine\controllers\AdminController;
 //use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
@@ -82,8 +82,8 @@ class DefaultController extends AdminController {
      * @return mixed
      */
     public function actionCreate() {
-        /** @var \shopium24\mod\user\models\User $user */
-        /** @var \shopium24\mod\user\models\Profile $profile */
+        /** @var \panix\mod\user\models\User $user */
+        /** @var \panix\mod\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
         $user->setScenario("admin");
         $profile = Yii::$app->getModule("user")->model("Profile");

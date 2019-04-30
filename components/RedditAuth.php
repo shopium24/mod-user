@@ -1,6 +1,6 @@
 <?php
 
-namespace shopium24\mod\user\components;
+namespace panix\mod\user\components;
 
 use Yii;
 use yii\authclient\OAuth2;

@@ -1,6 +1,6 @@
 <?php
 
-namespace shopium24\mod\user\models\forms;
+namespace panix\mod\user\models\forms;
 
 use Yii;
 use yii\base\Model;
@@ -16,7 +16,7 @@ class ResendForm extends Model
     public $email;
 
     /**
-     * @var \shopium24\mod\user\models\User
+     * @var \panix\mod\user\models\User
      */
     protected $_user = false;
 
@@ -52,7 +52,7 @@ class ResendForm extends Model
     /**
      * Get user based on email
      *
-     * @return \shopium24\mod\user\models\User|null
+     * @return \panix\mod\user\models\User|null
      */
     public function getUser()
     {
@@ -90,7 +90,7 @@ class ResendForm extends Model
         if ($this->validate()) {
 
             // get user
-            /** @var \shopium24\mod\user\models\UserKey $userKey */
+            /** @var \panix\mod\user\models\UserKey $userKey */
             $user    = $this->getUser();
             $userKey = Yii::$app->getModule("user")->model("UserKey");
 

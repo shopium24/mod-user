@@ -1,6 +1,6 @@
 <?php
 
-namespace shopium24\mod\user;
+namespace panix\mod\user;
 
 use Yii;
 use yii\base\BootstrapInterface;
@@ -8,7 +8,7 @@ use yii\base\InvalidConfigException;
 use yii\db\ActiveRecord;
 use yii\web\GroupUrlRule;
 use panix\engine\WebModule;
-use shopium24\mod\user\models\forms\SettingsForm;
+use panix\mod\user\models\forms\SettingsForm;
 
 class Module extends WebModule implements BootstrapInterface
 {
@@ -213,7 +213,7 @@ class Module extends WebModule implements BootstrapInterface
         // this typically causes problems in the yii2-advanced app
         // when people set it in "common/config" instead of "frontend/config" and/or "backend/config"
         //   -> this results in users failing to login without any feedback/error message
-        if (!Yii::$app->request->isConsoleRequest && !Yii::$app->get("user") instanceof \shopium24\mod\user\components\User) {
+        if (!Yii::$app->request->isConsoleRequest && !Yii::$app->get("user") instanceof \panix\mod\user\components\User) {
             throw new InvalidConfigException('Yii::$app->user is not set properly. It needs to extend \panix\user\components\User');
         }
     }
@@ -224,15 +224,15 @@ class Module extends WebModule implements BootstrapInterface
     protected function getDefaultModelClasses()
     {
         return [
-            'User' => 'shopium24\mod\user\models\User',
-            'Profile' => 'shopium24\mod\user\models\Profile',
-            'Role' => 'shopium24\mod\user\models\Role',
-            'UserKey' => 'shopium24\mod\user\models\UserKey',
-            'UserAuth' => 'shopium24\mod\user\models\UserAuth',
-            'ForgotForm' => 'shopium24\mod\user\models\forms\ForgotForm',
-            'LoginForm' => 'shopium24\mod\user\models\forms\LoginForm',
-            'ResendForm' => 'shopium24\mod\user\models\forms\ResendForm',
-            'UserSearch' => 'shopium24\mod\user\models\search\UserSearch',
+            'User' => 'panix\mod\user\models\User',
+            'Profile' => 'panix\mod\user\models\Profile',
+            'Role' => 'panix\mod\user\models\Role',
+            'UserKey' => 'panix\mod\user\models\UserKey',
+            'UserAuth' => 'panix\mod\user\models\UserAuth',
+            'ForgotForm' => 'panix\mod\user\models\forms\ForgotForm',
+            'LoginForm' => 'panix\mod\user\models\forms\LoginForm',
+            'ResendForm' => 'panix\mod\user\models\forms\ResendForm',
+            'UserSearch' => 'panix\mod\user\models\search\UserSearch',
         ];
     }
 

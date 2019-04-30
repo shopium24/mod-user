@@ -1,10 +1,10 @@
 <?php
 
-namespace shopium24\mod\user\controllers\admin;
+namespace panix\mod\user\controllers\admin;
 
 use Yii;
 use panix\engine\controllers\AdminController;
-use shopium24\mod\user\models\forms\SettingsForm;
+use panix\mod\user\models\forms\SettingsForm;
 
 class SettingsController extends AdminController
 {
