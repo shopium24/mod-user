@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
- * @var panix\mod\user\models\forms\ForgotForm $model
+ * @var shopium24\mod\user\models\forms\ForgotForm $model
  */
 
 $this->title = Yii::t('user/default', 'Forgot password');

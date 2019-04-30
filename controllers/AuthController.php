@@ -1,6 +1,6 @@
 <?php
 
-namespace panix\mod\user\controllers;
+namespace shopium24\mod\user\controllers;
 
 use Yii;
 use yii\web\Controller;
@@ -84,11 +84,11 @@ class AuthController extends Controller
      * matched by email address
      *
      * @param \yii\authclient\BaseClient $client
-     * @return \panix\mod\user\models\UserAuth
+     * @return \shopium24\mod\user\models\UserAuth
      */
     protected function initUserAuth($client)
     {
-        /** @var \panix\mod\user\models\UserAuth $userAuth */
+        /** @var \shopium24\mod\user\models\UserAuth $userAuth */
 
         // build data. note that we don't set `user_id` yet
         $attributes = $client->getUserAttributes();
@@ -115,8 +115,8 @@ class AuthController extends Controller
      */
     protected function attemptLogin($client)
     {
-        /** @var \panix\mod\user\models\User     $user */
-        /** @var \panix\mod\user\models\UserAuth $userAuth */
+        /** @var \shopium24\mod\user\models\User     $user */
+        /** @var \shopium24\mod\user\models\UserAuth $userAuth */
         $user         = Yii::$app->getModule("user")->model("User");
         $userAuth = Yii::$app->getModule("user")->model("UserAuth");
 
@@ -167,8 +167,8 @@ class AuthController extends Controller
      */
     protected function clearNewEmail($email)
     {
-        /** @var \panix\mod\user\models\User    $user */
-        /** @var \panix\mod\user\models\UserKey $userKey */
+        /** @var \shopium24\mod\user\models\User    $user */
+        /** @var \shopium24\mod\user\models\UserKey $userKey */
         $user = Yii::$app->getModule("user")->model("User");
         $userKey = Yii::$app->getModule("user")->model("UserKey");
 
@@ -191,13 +191,13 @@ class AuthController extends Controller
      * Register a new user using client attributes and then associate userAuth
      *
      * @param \yii\authclient\BaseClient $client
-     * @param \panix\mod\user\models\UserAuth $userAuth
+     * @param \shopium24\mod\user\models\UserAuth $userAuth
      */
     protected function registerAndLoginUser($client, $userAuth)
     {
-        /** @var \panix\mod\user\models\User    $user */
-        /** @var \panix\mod\user\models\Profile $profile */
-        /** @var \panix\mod\user\models\Role    $role */
+        /** @var \shopium24\mod\user\models\User    $user */
+        /** @var \shopium24\mod\user\models\Profile $profile */
+        /** @var \shopium24\mod\user\models\Role    $role */
         $role = Yii::$app->getModule("user")->model("Role");
 
         // set user and profile info
@@ -222,7 +222,7 @@ class AuthController extends Controller
      * Double checks username to ensure that it isn't already taken. If so,
      * revert to fallback
      *
-     * @param \panix\mod\user\models\User $user
+     * @param \shopium24\mod\user\models\User $user
      * @param string $fallbackUsername
      * @return mixed
      */
@@ -247,8 +247,8 @@ class AuthController extends Controller
      */
     protected function setInfoFacebook($attributes)
     {
-        /** @var \panix\mod\user\models\User    $user */
-        /** @var \panix\mod\user\models\Profile $profile */
+        /** @var \shopium24\mod\user\models\User    $user */
+        /** @var \shopium24\mod\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
         $profile = Yii::$app->getModule("user")->model("Profile");
 
@@ -279,8 +279,8 @@ class AuthController extends Controller
      */
     protected function setInfoTwitter($attributes)
     {
-        /** @var \panix\mod\user\models\User    $user */
-        /** @var \panix\mod\user\models\Profile $profile */
+        /** @var \shopium24\mod\user\models\User    $user */
+        /** @var \shopium24\mod\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
         $profile = Yii::$app->getModule("user")->model("Profile");
 
@@ -298,8 +298,8 @@ class AuthController extends Controller
      */
     protected function setInfoGoogle($attributes)
     {
-        /** @var \panix\mod\user\models\User    $user */
-        /** @var \panix\mod\user\models\Profile $profile */
+        /** @var \shopium24\mod\user\models\User    $user */
+        /** @var \shopium24\mod\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
         $profile = Yii::$app->getModule("user")->model("Profile");
 
@@ -317,8 +317,8 @@ class AuthController extends Controller
      */
     protected function setInfoReddit($attributes)
     {
-        /** @var \panix\mod\user\models\User    $user */
-        /** @var \panix\mod\user\models\Profile $profile */
+        /** @var \shopium24\mod\user\models\User    $user */
+        /** @var \shopium24\mod\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
         $profile = Yii::$app->getModule("user")->model("Profile");
 
@@ -335,8 +335,8 @@ class AuthController extends Controller
      */
     protected function setInfoLinkedIn($attributes)
     {
-        /** @var \panix\mod\user\models\User    $user */
-        /** @var \panix\mod\user\models\Profile $profile */
+        /** @var \shopium24\mod\user\models\User    $user */
+        /** @var \shopium24\mod\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
         $profile = Yii::$app->getModule("user")->model("Profile");
 
@@ -355,8 +355,8 @@ class AuthController extends Controller
      */
     protected function setInfoVkontakte($attributes)
     {
-        /** @var \panix\mod\user\models\User    $user */
-        /** @var \panix\mod\user\models\Profile $profile */
+        /** @var \shopium24\mod\user\models\User    $user */
+        /** @var \shopium24\mod\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
         $profile = Yii::$app->getModule("user")->model("Profile");
         

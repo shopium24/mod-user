@@ -1,6 +1,6 @@
 <?php
 
-namespace panix\mod\user\commands;
+namespace shopium24\mod\user\commands;
 
 
 use Yii;

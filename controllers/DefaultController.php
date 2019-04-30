@@ -1,6 +1,6 @@
 <?php
 
-namespace panix\mod\user\controllers;
+namespace shopium24\mod\user\controllers;
 
 use Yii;
 use yii\web\Controller;
@@ -125,7 +125,7 @@ class DefaultController extends Controller {
     /**
      * Process data after registration
      *
-     * @param \panix\mod\user\models\User $user
+     * @param \shopium24\mod\user\models\User $user
      */
     protected function afterRegister($user) {
         // determine userKey type to see if we need to send email
@@ -157,8 +157,8 @@ class DefaultController extends Controller {
      * Confirm email
      */
     public function actionConfirm($key) {
-        /** @var \panix\mod\user\models\UserKey $userKey */
-        /** @var \panix\mod\user\models\User $user */
+        /** @var \shopium24\mod\user\models\UserKey $userKey */
+        /** @var \shopium24\mod\user\models\User $user */
         // search for userKey
         $success = false;
         $userKey = Yii::$app->getModule("user")->model("UserKey");

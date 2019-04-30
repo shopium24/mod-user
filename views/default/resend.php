@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
- * @var panix\mod\user\models\forms\ResendForm $model
+ * @var shopium24\mod\user\models\forms\ResendForm $model
  */
 
 $this->view->title = Yii::t('user/default', 'Resend');

@@ -1,6 +1,6 @@
 <?php
 
-namespace panix\mod\user\models\forms;
+namespace shopium24\mod\user\models\forms;
 
 use panix\engine\SettingsModel;
 

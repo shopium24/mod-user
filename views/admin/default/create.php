@@ -4,8 +4,8 @@ use yii\helpers\Html;
 
 /**
  * @var yii\web\View $this
- * @var panix\mod\user\models\User $user
- * @var panix\mod\user\models\Profile $profile
+ * @var shopium24\mod\user\models\User $user
+ * @var shopium24\mod\user\models\Profile $profile
  */
 
 $this->title = Yii::t('user/default', 'Create {modelClass}', [

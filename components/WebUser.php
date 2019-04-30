@@ -1,6 +1,6 @@
 <?php
 
-namespace panix\mod\user\components;
+namespace shopium24\mod\user\components;
 
 use Yii;
 
@@ -12,7 +12,7 @@ class WebUser extends \yii\web\User {
     /**
      * @inheritdoc
      */
-    public $identityClass = 'panix\mod\user\models\User';
+    public $identityClass = 'shopium24\mod\user\models\User';
 
     /**
      * @inheritdoc

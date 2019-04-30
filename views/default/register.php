@@ -1,68 +1,61 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
- * @var panix\mod\user\models\User $user
- * @var panix\mod\user\models\User $profile
+ * @var shopium24\mod\user\models\User $user
  * @var string $userDisplayName
  */
 
 $this->title = Yii::t('user/default', 'Register');
 $this->params['breadcrumbs'][] = $this->title;
-?>111
-<div class="user-default-register">
+?>1112
+<div class="row">
+    <div class="col-md-4 offset-md-4">
+        <h1><?= Html::encode($this->title) ?></h1>
 
-	<h1><?= Html::encode($this->title) ?></h1>
+        <?php if ($flash = Yii::$app->session->getFlash("Register-success")) { ?>
 
-    <?php if ($flash = Yii::$app->session->getFlash("Register-success")): ?>
+            <div class="alert alert-success"><?= $flash ?></div>
 
-        <div class="alert alert-success">
-            <p><?= $flash ?></p>
-        </div>
+        <?php } else { ?>
 
-    <?php else: ?>
+            <p><?= Yii::t("user/default", "Please fill out the following fields to register:") ?></p>
 
-        <p><?= Yii::t("user/default", "Please fill out the following fields to register:") ?></p>
+            <?php $form = ActiveForm::begin([
+                'id' => 'register-form',
+                'options' => ['class' => 'form-horizontal'],
+                'fieldClass'=>'panix\engine\bootstrap\ActiveField',
+                'fieldConfig' => [
+                    'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-7\">{error}</div>",
+                    'labelOptions' => ['class' => 'col-lg-2 control-label'],
+                ],
+                'enableAjaxValidation' => true,
+            ]); ?>
 
-        <?php $form = ActiveForm::begin([
-            'id' => 'register-form',
-            'options' => ['class' => 'form-horizontal'],
-            'fieldConfig' => [
-                'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-7\">{error}</div>",
-                'labelOptions' => ['class' => 'col-lg-2 control-label'],
-            ],
-            'enableAjaxValidation' => true,
-        ]); ?>
 
-        <?php if (Yii::$app->getModule("user")->requireEmail): ?>
             <?= $form->field($user, 'email') ?>
-        <?php endif; ?>
-
-        <?php if (Yii::$app->getModule("user")->requireUsername): ?>
             <?= $form->field($user, 'username') ?>
-        <?php endif; ?>
+            <?= $form->field($user, 'newPassword')->passwordInput() ?>
 
-        <?= $form->field($user, 'newPassword')->passwordInput() ?>
-
-        <?php /* uncomment if you want to add profile fields here
+            <?php /* uncomment if you want to add profile fields here
         <?= $form->field($profile, 'full_name') ?>
         */ ?>
 
-        <div class="form-group">
-            <div class="col-lg-offset-2 col-lg-10">
-                <?= Html::submitButton(Yii::t('user/default', 'Register'), ['class' => 'btn btn-primary']) ?>
+            <div class="form-group row">
+                <div class="col-lg-offset-2 col-lg-10">
+                    <?= Html::submitButton(Yii::t('user/default', 'REGISTER'), ['class' => 'btn btn-primary']) ?>
 
-                <br/><br/>
-                <?= Html::a(Yii::t('user/default', 'Login'), ["/user/login"]) ?>
+                    <br/><br/>
+                    <?= Html::a(Yii::t('user/default', 'Login'), ["/user/login"]) ?>
+                </div>
             </div>
-        </div>
 
-        <?php ActiveForm::end(); ?>
+            <?php ActiveForm::end(); ?>
 
-    <?php endif; ?>
-
+        <?php } ?>
+    </div>
 </div>
