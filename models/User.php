@@ -25,8 +25,8 @@ use ReflectionClass;
  * @property string    $login_ip
  * @property string    $login_time
  * @property string    $create_ip
- * @property string    $create_time
- * @property string    $update_time
+ * @property string    $created_at
+ * @property string    $updated_at
  * @property string    $ban_time
  * @property string    $ban_reason
  *
@@ -148,31 +148,13 @@ class User extends ActiveRecord implements IdentityInterface {
             'login_ip' => Yii::t('user/User', 'Login Ip'),
             'login_time' => Yii::t('user/User', 'Login Time'),
             'create_ip' => Yii::t('user/User', 'Create Ip'),
-            'create_time' => Yii::t('user/User', 'Create Time'),
-            'update_time' => Yii::t('user/User', 'Update Time'),
+            'created_at' => Yii::t('user/User', 'Create Time'),
+            'updated_at' => Yii::t('user/User', 'Update Time'),
             'ban_time' => Yii::t('user/User', 'Ban Time'),
             'ban_reason' => Yii::t('user/User', 'Ban Reason'),
             'currentPassword' => Yii::t('user/User', 'Current Password'),
             'newPassword' => Yii::t('user/User', 'New Password'),
             'newPasswordConfirm' => Yii::t('user/User', 'New Password Confirm'),
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function behaviors() {
-        return [
-            'timestamp' => [
-                'class' => 'yii\behaviors\TimestampBehavior',
-                'value' => function () {
-                    return date("Y-m-d H:i:s");
-                },
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'create_time',
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'update_time',
-                ],
-            ],
         ];
     }
 

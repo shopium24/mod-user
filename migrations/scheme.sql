@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS `{prefix}user` (
   `login_ip` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `login_time` timestamp NULL DEFAULT NULL,
   `create_ip` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `create_time` timestamp NULL DEFAULT NULL,
-  `update_time` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   `ban_time` timestamp NULL DEFAULT NULL,
   `ban_reason` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `language` varchar(2) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -29,13 +29,13 @@ CREATE TABLE IF NOT EXISTS `{prefix}user` (
 CREATE TABLE `{prefix}role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `create_time` timestamp NULL DEFAULT NULL,
-  `update_time` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   `can_admin` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET={charset};
 
-INSERT INTO `{prefix}role` (`id`, `name`, `create_time`, `update_time`, `can_admin`) VALUES
+INSERT INTO `{prefix}role` (`id`, `name`, `created_at`, `updated_at`, `can_admin`) VALUES
 (1, 'Admin', '2015-04-20 03:19:33', NULL, 1),
 (2, 'User', '2015-04-20 03:19:33', NULL, 0);
 
@@ -60,8 +60,8 @@ CREATE TABLE `{prefix}user_auth` (
   `provider` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `provider_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `provider_attributes` text COLLATE utf8_unicode_ci NOT NULL,
-  `create_time` timestamp NULL DEFAULT NULL,
-  `update_time` timestamp NULL DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_auth_provider_id` (`provider_id`),
   KEY `{prefix}auth_user_id` (`user_id`)

@@ -92,8 +92,8 @@ class UserSearch extends User {
                 ->andFilterWhere(['like', 'create_ip', $this->create_ip])
                 ->andFilterWhere(['like', 'ban_reason', $this->ban_reason])
                 ->andFilterWhere(['like', 'login_time', $this->login_time])
-                ->andFilterWhere(['like', "{$userTable}.create_time", $this->create_time])
-                ->andFilterWhere(['like', "{$userTable}.update_time", $this->update_time])
+                ->andFilterWhere(['like', "{$userTable}.created_at", $this->created_at])
+                ->andFilterWhere(['like', "{$userTable}.updated_at", $this->updated_at])
                 ->andFilterWhere(['like', 'ban_time', $this->ban_time])
                 ->andFilterWhere(['like', 'profile.full_name', $this->getAttribute('profile.full_name')]);
 

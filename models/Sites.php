@@ -49,8 +49,8 @@ class Sites extends ActiveRecord
         return [
             'id' => Yii::t('user/default', 'ID'),
             'user_id' => Yii::t('user/default', 'User ID'),
-            'create_time' => Yii::t('user/default', 'Create Time'),
-            'update_time' => Yii::t('user/default', 'Update Time'),
+            'created_at' => Yii::t('user/default', 'Create Time'),
+            'updated_at' => Yii::t('user/default', 'Update Time'),
             'full_name' => Yii::t('user/default', 'Full Name'),
         ];
     }
