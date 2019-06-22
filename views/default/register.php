@@ -34,11 +34,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?= $form->field($user, 'email') ?>
                 <?= $form->field($user, 'username') ?>
+                <?= $form->field($site, 'subdomain') ?>
                 <?= $form->field($user, 'newPassword')->passwordInput() ?>
 
-                <?php /* uncomment if you want to add profile fields here
-        <?= $form->field($profile, 'full_name') ?>
-        */ ?>
 
                 <div class="form-group row">
                     <div class="col-lg-offset-2 col-lg-10">

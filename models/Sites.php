@@ -2,9 +2,10 @@
 
 namespace shopium24\mod\user\models;
 
-use shopium24\mod\plans\models\Plans;
+
 use Yii;
 use panix\engine\db\ActiveRecord;
+use shopium24\mod\plans\models\Plans;
 
 /**
  * This is the model class for table "tbl_sites".
@@ -38,7 +39,8 @@ class Sites extends ActiveRecord
             //            [['user_id'], 'required'],
             //            [['user_id'], 'integer'],
             //            [['create_time', 'update_time'], 'safe'],
-            [['full_name'], 'string', 'max' => 255]
+            [['subdomain'], 'string', 'max' => 100],
+            [['subdomain'], 'required']
         ];
     }
 
@@ -75,7 +77,7 @@ class Sites extends ActiveRecord
      * @param int $userId
      * @return static
      */
-    public function setUser($userId)
+    public function setUser22($userId)
     {
         $this->user_id = $userId;
         return $this;

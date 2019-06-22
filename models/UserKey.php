@@ -12,7 +12,7 @@ use yii\db\ActiveRecord;
  * @property integer $user_id
  * @property integer $type
  * @property string $key
- * @property string $create_time
+ * @property string $created_at
  * @property string $consume_time
  * @property string $expire_time
  *
@@ -78,24 +78,6 @@ class UserKey extends ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'timestamp' => [
-                'class' => 'yii\behaviors\TimestampBehavior',
-                'value' => function () {
-                    return date("Y-m-d H:i:s");
-                },
-                'attributes' => [
-                    // set only create_time because there is no update_time
-                    ActiveRecord::EVENT_BEFORE_INSERT => ['create_time'],
-                ],
-            ],
-        ];
-    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -126,7 +108,7 @@ class UserKey extends ActiveRecord
         // set/update data
         $model->user_id = $userId;
         $model->type = $type;
-        $model->create_time = date("Y-m-d H:i:s");
+        $model->created_at = date("Y-m-d H:i:s");
         $model->expire_time = $expireTime;
         $model->key = Yii::$app->security->generateRandomString();
         $model->save(false);

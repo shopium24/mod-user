@@ -60,11 +60,6 @@ class Module extends WebModule implements BootstrapInterface
     public $loginRedirect = null;
 
     /**
-     * @var array|string|null Url to redirect to after logging out. If null, will redirect to home page
-     */
-    public $logoutRedirect = null;
-
-    /**
      * @var bool If true, users will have to confirm their email address after registering (= email activation)
      */
     public $emailConfirmation = true;

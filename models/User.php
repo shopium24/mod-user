@@ -104,8 +104,8 @@ class User extends ActiveRecord implements IdentityInterface {
             [['currentPassword'], 'required', 'on' => ['account']],
             [['currentPassword'], 'validateCurrentPassword', 'on' => ['account']],
             // admin crud rules
-            [['role_id', 'status'], 'required', 'on' => ['admin']],
-            [['role_id', 'status'], 'integer', 'on' => ['admin']],
+            //[['role_id', 'status'], 'required', 'on' => ['admin']],
+            //[['role_id', 'status'], 'integer', 'on' => ['admin']],
             [['ban_time'], 'integer', 'on' => ['admin']],
             [['ban_reason'], 'string', 'max' => 255, 'on' => 'admin'],
         ];
@@ -137,7 +137,7 @@ class User extends ActiveRecord implements IdentityInterface {
     public function attributeLabels() {
         return [
             'id' => Yii::t('user/User', 'ID'),
-            'role_id' => Yii::t('user/User', 'Role ID'),
+            //'role_id' => Yii::t('user/User', 'Role ID'),
             'status' => Yii::t('user/User', 'Status'),
             'email' => Yii::t('user/User', 'Email'),
             'new_email' => Yii::t('user/User', 'New Email'),
@@ -162,17 +162,16 @@ class User extends ActiveRecord implements IdentityInterface {
      * @return \yii\db\ActiveQuery
      */
     public function getSite() {
-        $site = Yii::$app->getModule("user")->model("Sites");
-        return $this->hasOne($site::className(), ['user_id' => 'id']);
+        return $this->hasOne(Sites::class, ['user_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
-     */
+
     public function getRole() {
         $role = Yii::$app->getModule("user")->model("Role");
         return $this->hasOne($role::className(), ['id' => 'role_id']);
-    }
+    }*/
     
     public function getSession() {
         return $this->hasOne(SessionUser::class, ['user_id' => 'id']);
@@ -272,7 +271,7 @@ class User extends ActiveRecord implements IdentityInterface {
     public function setRegisterAttributes($roleId, $userIp, $status = null) {
         // set default attributes
         $attributes = [
-            "role_id" => $roleId,
+           // "role_id" => $roleId,
             "create_ip" => $userIp,
             "auth_key" => Yii::$app->security->generateRandomString(),
             "api_key" => Yii::$app->security->generateRandomString(),
