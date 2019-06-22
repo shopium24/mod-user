@@ -55,11 +55,12 @@ class m150214_044831_init_user extends Migration
             'expire_time' => Schema::TYPE_TIMESTAMP . ' null default null',
         ], $tableOptions);
         $this->createTable(Sites::tableName(), [
-            'id' => Schema::TYPE_PK,
-            'user_id' => Schema::TYPE_INTEGER . ' not null',
+            'id' => $this->primaryKey()->unsigned(),
+            'user_id' => $this->integer()->unsigned(),
+            'plan_id' => $this->tinyInteger()->unsigned(),
             'created_at' => Schema::TYPE_TIMESTAMP . ' null default null',
             'updated_at' => Schema::TYPE_TIMESTAMP . ' null default null',
-            'domain' => Schema::TYPE_STRING . ' null default null',
+            'subdomain' => $this->string(50)->notNull(),
         ], $tableOptions);
         $this->createTable('{{%user_auth}}', [
             'id' => Schema::TYPE_PK,

@@ -2,8 +2,9 @@
 
 namespace shopium24\mod\user\models;
 
+use shopium24\mod\plans\models\Plans;
 use Yii;
-use yii\db\ActiveRecord;
+use panix\engine\db\ActiveRecord;
 
 /**
  * This is the model class for table "tbl_sites".
@@ -60,8 +61,12 @@ class Sites extends ActiveRecord
      */
     public function getUser()
     {
-        $user = Yii::$app->getModule("user")->model("User");
-        return $this->hasOne($user::className(), ['id' => 'user_id']);
+        return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    public function getPlan()
+    {
+        return $this->hasOne(Plans::class, ['id' => 'plan_id']);
     }
 
     /**

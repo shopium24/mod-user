@@ -190,7 +190,7 @@ class User extends ActiveRecord implements IdentityInterface {
      * @return \yii\db\ActiveQuery
      */
     public function getUserAuths() {
-        return $this->hasMany(UserAuth::className(), ['user_id' => 'id']);
+        return $this->hasMany(UserAuth::class, ['user_id' => 'id']);
     }
 
     /**

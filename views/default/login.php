@@ -12,6 +12,11 @@ use yii\widgets\ActiveForm;
 $this->title = Yii::t('user/default', 'Login');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+
+
 <div class="user-default-login">
 
 	<h1><?= Html::encode($this->title) ?></h1>
@@ -56,8 +61,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php endif; ?>
 
 	<div class="col-lg-offset-2" style="color:#999;">
-		You may login with <strong>neo/neo</strong>.<br>
+
 		To modify the username/password, log in first and then <?= HTML::a("update your account", ["/user/account"]) ?>.
 	</div>
 
+</div>
+        </div>
+    </div>
 </div>

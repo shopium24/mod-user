@@ -1,46 +1,56 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use panix\engine\bootstrap\ActiveForm;
 
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
+ * @var \shopium24\mod\user\models\User $user
  */
 
 $this->title = Yii::t('user/default', 'Profile');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-default-profile">
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
 
-	<h1><?= Html::encode($this->title) ?></h1>
 
-    <?php if ($flash = Yii::$app->session->getFlash("Profile-success")): ?>
+            <div class="user-default-profile">
 
-        <div class="alert alert-success">
-            <p><?= $flash ?></p>
-        </div>
+                <h1><?= Html::encode($this->title) ?></h1>
 
-    <?php endif; ?>
+                <?php if ($flash = Yii::$app->session->getFlash("profile-success")): ?>
 
-    <?php $form = ActiveForm::begin([
-        'id' => 'profile-form',
-        'options' => ['class' => 'form-horizontal'],
-        'fieldConfig' => [
-            'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-7\">{error}</div>",
-            'labelOptions' => ['class' => 'col-lg-2 control-label'],
-        ],
-        'enableAjaxValidation' => true,
-    ]); ?>
+                    <div class="alert alert-success">
+                        <p><?= $flash ?></p>
+                    </div>
 
-    <?= $form->field($profile, 'full_name') ?>
+                <?php endif; ?>
 
-    <div class="form-group">
-        <div class="col-lg-offset-2 col-lg-10">
-            <?= Html::submitButton(Yii::t('user/default', 'Update'), ['class' => 'btn btn-primary']) ?>
+                <?php $form = ActiveForm::begin([
+                    'id' => 'profile-form',
+                    'options' => ['class' => 'form-horizontal'],
+                    'fieldConfig' => [
+                        'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-7\">{error}</div>",
+                        'labelOptions' => ['class' => 'col-lg-2 control-label'],
+                    ],
+                    'enableAjaxValidation' => true,
+                ]); ?>
+
+                <?= $form->field($user, 'username') ?>
+                <?= $form->field($user, 'phone') ?>
+
+                <div class="form-group">
+                    <div class="col-lg-offset-2 col-lg-10">
+                        <?= Html::submitButton(Yii::t('user/default', 'Update'), ['class' => 'btn btn-primary']) ?>
+                    </div>
+                </div>
+
+                <?php ActiveForm::end(); ?>
+
+            </div>
         </div>
     </div>
-
-    <?php ActiveForm::end(); ?>
-
 </div>

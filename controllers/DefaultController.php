@@ -2,6 +2,8 @@
 
 namespace shopium24\mod\user\controllers;
 
+use shopium24\mod\user\models\search\SitesSearch;
+use shopium24\mod\user\models\Sites;
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
@@ -73,7 +75,19 @@ class DefaultController extends Controller {
             return $this->redirect($logoutRedirect);
         }
     }
+    public function actionSites() {
+        $sites = Sites::find()->all();
 
+        $searchModel = new SitesSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->getQueryParams());
+
+
+        return $this->render("sites", [
+            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+        ]);
+
+    }
     /**
      * Display registration page
      */
@@ -227,25 +241,25 @@ class DefaultController extends Controller {
      * Profile
      */
     public function actionProfile() {
-        $profile = Yii::$app->user->identity->profile;
-        $loadedPost = $profile->load(Yii::$app->request->post());
+        $user = Yii::$app->user->identity;
+        $loadedPost = $user->load(Yii::$app->request->post());
 
         // validate for ajax request
         if ($loadedPost && Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($profile);
+            return ActiveForm::validate($user);
         }
 
         // validate for normal request
-        if ($loadedPost && $profile->validate()) {
-            $profile->save(false);
-            Yii::$app->session->setFlash("Profile-success", Yii::t("user/default", "Profile updated"));
+        if ($loadedPost && $user->validate()) {
+            $user->save(false);
+            Yii::$app->session->setFlash("profile-success", Yii::t("user/default", "Profile updated"));
             return $this->refresh();
         }
 
         // render
         return $this->render("profile", [
-                    'profile' => $profile,
+                    'user' => $user,
         ]);
     }
 

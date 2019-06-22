@@ -5,12 +5,12 @@ namespace shopium24\mod\user\models\search;
 use Yii;
 use yii\base\Model;
 use panix\engine\data\ActiveDataProvider;
-use shopium24\mod\user\models\User;
+use shopium24\mod\user\models\Sites;
 
 /**
  * UserSearch represents the model behind the search form about `shopium24\mod\user\models\User`.
  */
-class UserSearch extends User {
+class SitesSearch extends Sites {
 
     /**
      * @inheritdoc
@@ -47,7 +47,7 @@ class UserSearch extends User {
     public function search($params) {
 
         // get models
-        $user = Yii::$app->getModule("user")->model("User");
+        $user = new Sites;
         $userTable = $user::tableName();
 
         // set up query with relation to `profile.full_name`
@@ -81,16 +81,7 @@ class UserSearch extends User {
                 ->andFilterWhere(['like', 'new_email', $this->new_email])
                 ->andFilterWhere(['like', 'username', $this->username])
                 ->andFilterWhere(['like', 'password', $this->password])
-                ->andFilterWhere(['like', 'auth_key', $this->auth_key])
-                ->andFilterWhere(['like', 'api_key', $this->api_key])
-                ->andFilterWhere(['like', 'login_ip', $this->login_ip])
-                ->andFilterWhere(['like', 'create_ip', $this->create_ip])
-                ->andFilterWhere(['like', 'ban_reason', $this->ban_reason])
-                ->andFilterWhere(['like', 'login_time', $this->login_time])
-                ->andFilterWhere(['like', "{$userTable}.created_at", $this->created_at])
-                ->andFilterWhere(['like', "{$userTable}.updated_at", $this->updated_at])
-                ->andFilterWhere(['like', 'ban_time', $this->ban_time])
-                ->andFilterWhere(['like', 'profile.full_name', $this->getAttribute('profile.full_name')]);
+                ->andFilterWhere(['like', 'auth_key', $this->auth_key]);
 
         return $dataProvider;
     }

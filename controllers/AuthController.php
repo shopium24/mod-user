@@ -288,7 +288,7 @@ class AuthController extends Controller
      * Set info for google registration
      *
      * @param array $attributes
-     * @return array [$user, $profile]
+     * @return array [$user]
      */
     protected function setInfoGoogle($attributes)
     {
@@ -339,7 +339,7 @@ class AuthController extends Controller
      *
      * @author Ilya Sheershoff <sheershoff@gmail.com>
      * @param array $attributes
-     * @return array [$user, $profile]
+     * @return array [$user]
      */
     protected function setInfoVkontakte($attributes)
     {
