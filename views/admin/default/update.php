@@ -5,7 +5,6 @@ use yii\helpers\Html;
 /**
  * @var yii\web\View $this
  * @var shopium24\mod\user\models\User $user
- * @var shopium24\mod\user\models\Profile $profile
  */
 ?>
 <div class="panel panel-default">
@@ -16,7 +15,6 @@ use yii\helpers\Html;
         <?=
         $this->render('_form', [
             'user' => $user,
-            'profile' => $profile,
         ])
         ?>
     </div>

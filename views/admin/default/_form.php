@@ -8,7 +8,6 @@ $role = Yii::$app->getModule("user")->model("Role");
 /**
  * @var yii\web\View $this
  * @var shopium24\mod\user\models\User $user
- * @var shopium24\mod\user\models\Profile $profile
  * @var yii\widgets\ActiveForm $form
  */
 ?>
@@ -36,8 +35,6 @@ $role = Yii::$app->getModule("user")->model("Role");
     <?= $form->field($user, 'username')->textInput(['maxlength' => 255]) ?>
 
     <?= $form->field($user, 'newPassword')->passwordInput() ?>
-
-    <?= $form->field($profile, 'full_name'); ?>
 
     <?= $form->field($user, 'role_id')->dropDownList($role::dropdown()); ?>
 

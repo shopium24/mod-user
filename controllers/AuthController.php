@@ -136,7 +136,7 @@ class AuthController extends Controller
         // this is mainly used for google auth, which returns the email in an array
         // @see setInfoGoogle()
         $function = "setInfo" . ucfirst($client->name);
-        list ($user, $profile) = $this->$function($attributes);
+        list ($user) = $this->$function($attributes);
 
         // attempt to find user by email
         if (!empty($user["email"])) {
@@ -196,14 +196,13 @@ class AuthController extends Controller
     protected function registerAndLoginUser($client, $userAuth)
     {
         /** @var \shopium24\mod\user\models\User    $user */
-        /** @var \shopium24\mod\user\models\Profile $profile */
         /** @var \shopium24\mod\user\models\Role    $role */
         $role = Yii::$app->getModule("user")->model("Role");
 
         // set user and profile info
         $attributes = $client->getUserAttributes();
         $function = "setInfo" . ucfirst($client->name); // "setInfoFacebook()"
-        list ($user, $profile) = $this->$function($attributes);
+        list ($user) = $this->$function($attributes);
 
         // calculate and double check username (in case it is already taken)
         $fallbackUsername = "{$client->name}_{$userAuth->provider_id}";
@@ -211,7 +210,6 @@ class AuthController extends Controller
 
         // save new models
         $user->setRegisterAttributes($role::ROLE_USER, Yii::$app->request->userIP, $user::STATUS_ACTIVE)->save(false);
-        $profile->setUser($user->id)->save(false);
         $userAuth->setUser($user->id)->save(false);
 
         // log user in
@@ -243,14 +241,12 @@ class AuthController extends Controller
      * Set info for facebook registration
      *
      * @param array $attributes
-     * @return array [$user, $profile]
+     * @return array [$user]
      */
     protected function setInfoFacebook($attributes)
     {
         /** @var \shopium24\mod\user\models\User    $user */
-        /** @var \shopium24\mod\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
-        $profile = Yii::$app->getModule("user")->model("Profile");
 
         // set email/username if they are set
         // note: email may be missing if user signed up using a phone number
@@ -266,28 +262,26 @@ class AuthController extends Controller
             $user->username = str_replace(" ", "_", $attributes["name"]);
         }
 
-        $profile->full_name = $attributes["name"];
+        $user->full_name = $attributes["name"];
 
-        return [$user, $profile];
+        return [$user];
     }
 
     /**
      * Set info for twitter registration
      *
      * @param array $attributes
-     * @return array [$user, $profile]
+     * @return array [$user]
      */
     protected function setInfoTwitter($attributes)
     {
         /** @var \shopium24\mod\user\models\User    $user */
-        /** @var \shopium24\mod\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
-        $profile = Yii::$app->getModule("user")->model("Profile");
 
         $user->username = $attributes["screen_name"];
-        $profile->full_name = $attributes["name"];
+        $user->full_name = $attributes["name"];
 
-        return [$user, $profile];
+        return [$user];
     }
 
     /**
@@ -299,51 +293,45 @@ class AuthController extends Controller
     protected function setInfoGoogle($attributes)
     {
         /** @var \shopium24\mod\user\models\User    $user */
-        /** @var \shopium24\mod\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
-        $profile = Yii::$app->getModule("user")->model("Profile");
 
         $user->email = $attributes["emails"][0]["value"];
-        $profile->full_name = "{$attributes["name"]["givenName"]} {$attributes["name"]["familyName"]}";
+        $user->full_name = "{$attributes["name"]["givenName"]} {$attributes["name"]["familyName"]}";
 
-        return [$user, $profile];
+        return [$user];
     }
 
     /**
      * Set info for reddit registration
      *
      * @param array $attributes
-     * @return array [$user, $profile]
+     * @return array [$user]
      */
     protected function setInfoReddit($attributes)
     {
         /** @var \shopium24\mod\user\models\User    $user */
-        /** @var \shopium24\mod\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
-        $profile = Yii::$app->getModule("user")->model("Profile");
 
         $user->username = $attributes["name"];
 
-        return [$user, $profile];
+        return [$user];
     }
 
     /**
      * Set info for LinkedIn registration
      *
      * @param array $attributes
-     * @return array [$user, $profile]
+     * @return array [$user]
      */
     protected function setInfoLinkedIn($attributes)
     {
         /** @var \shopium24\mod\user\models\User    $user */
-        /** @var \shopium24\mod\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
-        $profile = Yii::$app->getModule("user")->model("Profile");
 
         $user->email = $attributes["email"];
-        $profile->full_name = "{$attributes["first_name"]} {$attributes["last_name"]}";
+        $user->full_name = "{$attributes["first_name"]} {$attributes["last_name"]}";
 
-        return [$user, $profile];
+        return [$user];
     }
 
     /**
@@ -356,10 +344,8 @@ class AuthController extends Controller
     protected function setInfoVkontakte($attributes)
     {
         /** @var \shopium24\mod\user\models\User    $user */
-        /** @var \shopium24\mod\user\models\Profile $profile */
         $user = Yii::$app->getModule("user")->model("User");
-        $profile = Yii::$app->getModule("user")->model("Profile");
-        
+
         foreach($_SESSION as $k=>$v){
             if(is_object($v)&&get_class($v)=='yii\authclient\OAuthToken')
                 $user->email = $v->getParam('email');
@@ -379,9 +365,9 @@ class AuthController extends Controller
             $user->username =  'vkontakte_'.$attributes["id"];
         }
 
-        $profile->full_name = $attributes["first_name"].' '.$attributes["last_name"];
+        $user->full_name = $attributes["first_name"].' '.$attributes["last_name"];
 
-        return [$user, $profile];
+        return [$user];
     }
     
 }

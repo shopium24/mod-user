@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             'email:email',
-            'profile.full_name',
+            'full_name',
             [
                 'attribute' => 'create_time',
                 'label' => Yii::t('user/default', 'create_time'),

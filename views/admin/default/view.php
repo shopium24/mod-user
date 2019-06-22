@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'email:email',
             'new_email:email',
             'username',
-            'profile.full_name',
+            'full_name',
             'password',
             'auth_key',
             'api_key',

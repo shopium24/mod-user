@@ -5,7 +5,6 @@ use yii\helpers\Html;
 /**
  * @var yii\web\View $this
  * @var shopium24\mod\user\models\User $user
- * @var shopium24\mod\user\models\Profile $profile
  */
 
 $this->title = Yii::t('user/default', 'Create {modelClass}', [
@@ -17,7 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="user-create">
     <?= $this->render('_form', [
         'user' => $user,
-        'profile' => $profile,
     ]) ?>
 
 </div>
