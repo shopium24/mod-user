@@ -15,6 +15,7 @@ use shopium24\mod\plans\models\Plans;
  * @property string $create_time
  * @property string $update_time
  * @property string $full_name
+ * @property integer $hosting_account_id
  *
  * @property User $user
  */
@@ -40,21 +41,7 @@ class Sites extends ActiveRecord
             //            [['user_id'], 'integer'],
             //            [['create_time', 'update_time'], 'safe'],
             [['subdomain'], 'string', 'max' => 100],
-            [['subdomain'], 'required']
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('user/default', 'ID'),
-            'user_id' => Yii::t('user/default', 'User ID'),
-            'created_at' => Yii::t('user/default', 'Create Time'),
-            'updated_at' => Yii::t('user/default', 'Update Time'),
-            'full_name' => Yii::t('user/default', 'Full Name'),
+            [['subdomain','plan_id'], 'required']
         ];
     }
 

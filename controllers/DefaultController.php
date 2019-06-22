@@ -96,10 +96,16 @@ class DefaultController extends Controller
      */
     public function actionRegister()
     {
+
+
         // set up new user/profile objects
         $user = new User; //Yii::$app->getModule("user")->model("User", ["scenario" => "register"]);
         $user->setScenario('register');
         $sites = new Sites;
+
+
+        $sites->plan_id = Yii::$app->request->get('plan');
+
 
         // load post data
         $post = Yii::$app->request->post();
@@ -120,6 +126,7 @@ class DefaultController extends Controller
 
                 $user->save();
                 $sites->user_id = $user->id;
+                $sites->hosting_account_id = 1;
                 $sites->save();
                 $this->afterRegister($user);
 
@@ -251,6 +258,7 @@ class DefaultController extends Controller
     public function actionProfile()
     {
         $user = Yii::$app->user->identity;
+
         $loadedPost = $user->load(Yii::$app->request->post());
 
         // validate for ajax request

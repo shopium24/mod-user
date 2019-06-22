@@ -1,16 +1,17 @@
 <?php
 
 use yii\helpers\Html;
-use panix\engine\bootstrap\ActiveForm;
+use yii\widgets\ActiveForm;
 
 /**
  * @var yii\web\View $this
  * @var yii\widgets\ActiveForm $form
  * @var shopium24\mod\user\models\User $user
+ * @var shopium24\mod\user\models\Sites $site
  * @var string $userDisplayName
  */
 
-$this->title = Yii::t('user/default', 'Register');
+$this->title = Yii::t('user/default', 'REGISTER');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="container">
@@ -34,7 +35,28 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?= $form->field($user, 'email') ?>
                 <?= $form->field($user, 'username') ?>
-                <?= $form->field($site, 'subdomain') ?>
+                <?= $form->field($site, 'subdomain', [
+                'template' => '{label}
+<div class="input-group">
+  {input}
+    <div class="input-group-append">
+    <span class="input-group-text">.shopium24.com</span>
+  </div>
+</div>
+{error}{hint}']) ?>
+
+                <?= $form->field($site, 'plan_id', [
+                    'template' => '{label}
+<div class="input-group">
+  {input}
+    <div class="input-group-append">
+    <span class="input-group-text">14 дней бесплатно</span>
+  </div>
+</div>
+{error}{hint}'])->dropDownList(\yii\helpers\ArrayHelper::map(\shopium24\mod\plans\models\Plans::find()->all(), 'id', function ($model) {
+                    return $model['name'] . ' (' . number_format($model['price_month'], 0, '', '') . ' грн/мес.)';
+                   // return $model['name'] . ' (14 дней бесплатно)';
+                })); ?>
                 <?= $form->field($user, 'newPassword')->passwordInput() ?>
 
 
