@@ -12,6 +12,7 @@ use shopium24\mod\user\models\forms\SettingsForm;
 
 class Module extends WebModule implements BootstrapInterface
 {
+    public $userClass = '\shopium24\mod\user\models\User';
     public $icon = 'users';
     /**
      * @var string Alias for module
