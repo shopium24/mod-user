@@ -196,8 +196,6 @@ class AuthController extends Controller
     protected function registerAndLoginUser($client, $userAuth)
     {
         /** @var \shopium24\mod\user\models\User    $user */
-        /** @var \shopium24\mod\user\models\Role    $role */
-        $role = Yii::$app->getModule("user")->model("Role");
 
         // set user and profile info
         $attributes = $client->getUserAttributes();
@@ -209,7 +207,7 @@ class AuthController extends Controller
         $user = $this->doubleCheckUsername($user, $fallbackUsername);
 
         // save new models
-        $user->setRegisterAttributes($role::ROLE_USER, Yii::$app->request->userIP, $user::STATUS_ACTIVE)->save(false);
+        $user->setRegisterAttributes(Yii::$app->request->userIP, $user::STATUS_ACTIVE)->save(false);
         $userAuth->setUser($user->id)->save(false);
 
         // log user in

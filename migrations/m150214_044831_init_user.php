@@ -4,7 +4,6 @@ namespace shopium24\mod\user\migrations;
 use yii\db\Schema;
 use yii\db\Migration;
 use shopium24\mod\user\models\User;
-use shopium24\mod\user\models\Role;
 use shopium24\mod\user\models\Sites;
 
 class m150214_044831_init_user extends Migration
@@ -17,17 +16,8 @@ class m150214_044831_init_user extends Migration
             $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
         }
 
-        // create tables. note the specific order
-        $this->createTable('{{%user_role}}', [
-            'id' => Schema::TYPE_PK,
-            'name' => Schema::TYPE_STRING . ' not null',
-            'created_at' => Schema::TYPE_TIMESTAMP . ' null default null',
-            'updated_at' => Schema::TYPE_TIMESTAMP . ' null default null',
-            'can_admin' => Schema::TYPE_SMALLINT . ' not null default 0',
-        ], $tableOptions);
         $this->createTable(User::tableName(), [
             'id' => Schema::TYPE_PK,
-            'role_id' => Schema::TYPE_INTEGER . ' not null',
             'status' => Schema::TYPE_SMALLINT . ' not null',
             'email' => Schema::TYPE_STRING . ' null default null',
             'new_email' => Schema::TYPE_STRING . ' null default null',
@@ -58,6 +48,7 @@ class m150214_044831_init_user extends Migration
             'id' => $this->primaryKey()->unsigned(),
             'user_id' => $this->integer()->unsigned(),
             'plan_id' => $this->tinyInteger()->unsigned(),
+            'hosting_account_id'=>$this->string(15),
             'created_at' => Schema::TYPE_TIMESTAMP . ' null default null',
             'updated_at' => Schema::TYPE_TIMESTAMP . ' null default null',
             'subdomain' => $this->string(50)->notNull(),
@@ -79,23 +70,15 @@ class m150214_044831_init_user extends Migration
         $this->createIndex('{{%user_auth_provider_id}}', '{{%user_auth}}', 'provider_id', false);
 
         // add foreign keys for data integrity
-        $this->addForeignKey('{{%user_role_id}}', '{{%user}}', 'role_id', '{{%user_role}}', 'id');
         $this->addForeignKey('{{%user_key_user_id}}', '{{%user_key}}', 'user_id', '{{%user}}', 'id');
         $this->addForeignKey('{{%user_auth_user_id}}', '{{%user_auth}}', 'user_id', '{{%user}}', 'id');
 
-        // insert role data
-        $columns = ['name', 'can_admin', 'created_at'];
-        $this->batchInsert('{{%user_role}}', $columns, [
-            ['Admin', 1, date('Y-m-d H:i:s')],
-            ['User', 0, date('Y-m-d H:i:s')],
-        ]);
 
         // insert admin user: neo/neo
         $security = \Yii::$app->security;
-        $columns = ['role_id', 'email', 'username', 'password', 'status', 'created_at', 'api_key', 'auth_key'];
+        $columns = ['email', 'username', 'password', 'status', 'created_at', 'api_key', 'auth_key'];
         $this->batchInsert('{{%user}}', $columns, [
             [
-                Role::ROLE_ADMIN,
                 'dev@pixelion.com.ua',
                 'admin',
                 '$2y$13$VCTF0TcDFSb/1LkfKzR5uOAiQJIztPcBWVKMd/3VvIBUy.6sSAPvq',
@@ -113,7 +96,6 @@ class m150214_044831_init_user extends Migration
         $this->dropTable('{{%user_auth}}');
         $this->dropTable('{{%user_key}}');
         $this->dropTable(User::tableName());
-        $this->dropTable('{{%user_role}}');
     }
 
 }

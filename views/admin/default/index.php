@@ -5,14 +5,12 @@ use panix\engine\grid\GridView;
 use panix\engine\CMS;
 use yii\helpers\Html;
 $user = Yii::$app->getModule("user")->model("User");
-$role = Yii::$app->getModule("user")->model("Role");
 
 /**
  * @var yii\web\View $this
  * @var yii\data\ActiveDataProvider $dataProvider
  * @var shopium24\mod\user\models\search\UserSearch $searchModel
  * @var shopium24\mod\user\models\User $user
- * @var shopium24\mod\user\models\Role $role
  */
 $this->title = Yii::t('user/default', 'Users');
 $this->params['breadcrumbs'][] = $this->title;
@@ -53,15 +51,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'session.expire',
             [
-                'attribute' => 'role_id',
-                'label' => Yii::t('user/default', 'Role'),
-                'filter' => $role::dropdown(),
-                'value' => function($model, $index, $dataColumn) use ($role) {
-                    $roleDropdown = $role::dropdown();
-                    return $roleDropdown[$model->role_id];
-                },
-            ],
-            [
                 'attribute' => 'status',
                 'label' => Yii::t('user/default', 'Status'),
                 'filter' => $user::statusDropdown(),
@@ -75,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'create_time',
                 'label' => Yii::t('user/default', 'create_time'),
-                'value' => function($model, $index, $dataColumn) use ($role) {
+                'value' => function($model, $index, $dataColumn) {
                     return CMS::date($model->create_time);
                 },
             ],

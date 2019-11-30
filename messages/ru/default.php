@@ -16,7 +16,6 @@ return [
     'Full Name' => 'Полное имя',
     'Name' => 'Имя',
     'Can Admin' => 'Имеет права админа',
-    'Role' => 'Роль',
     'New Email' => 'Новый E-mail адрес',
     'Auth Key' => 'Ключ авторизации',
     'Api Key' => 'Ключ API',

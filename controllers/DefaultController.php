@@ -2,9 +2,11 @@
 
 namespace shopium24\mod\user\controllers;
 
+use panix\engine\CMS;
 use shopium24\mod\user\models\search\SitesSearch;
 use shopium24\mod\user\models\Sites;
 use shopium24\mod\user\models\User;
+use shopium24\mod\user\models\UserKey;
 use Yii;
 use yii\web\Controller;
 use yii\web\Response;
@@ -102,7 +104,7 @@ class DefaultController extends Controller
         $user = new User; //Yii::$app->getModule("user")->model("User", ["scenario" => "register"]);
         $user->setScenario('register');
         $sites = new Sites;
-
+      //  $sites->setScenario('register');
 
         $sites->plan_id = Yii::$app->request->get('plan');
 
@@ -138,6 +140,10 @@ class DefaultController extends Controller
                     $guestText = Yii::t("user/default", " - Please check your email to confirm your account");
                 }
                 Yii::$app->session->setFlash("Register-success", $successText . $guestText);
+            }else{
+                CMS::dump($user->errors);
+                CMS::dump($sites->errors);
+
             }
         }
 
@@ -156,7 +162,7 @@ class DefaultController extends Controller
     protected function afterRegister($user)
     {
         // determine userKey type to see if we need to send email
-        $userKey = Yii::$app->getModule("user")->model("UserKey");
+        $userKey = new UserKey();
         if ($user->status == $user::STATUS_INACTIVE) {
             $userKeyType = $userKey::TYPE_EMAIL_ACTIVATE;
         } elseif ($user->status == $user::STATUS_UNCONFIRMED_EMAIL) {

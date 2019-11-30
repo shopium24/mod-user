@@ -30,11 +30,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php $form = ActiveForm::begin([
                     'id' => 'register-form',
                     'enableAjaxValidation' => true,
-                ]); ?>
+                ]);
+
+                ?>
 
 
-                <?= $form->field($user, 'email') ?>
-                <?= $form->field($user, 'username') ?>
+                <?= $form->field($user, 'username')->label($user->getAttributeLabel('email')) ?>
                 <?= $form->field($site, 'subdomain', [
                 'template' => '{label}
 <div class="input-group">
@@ -57,7 +58,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model['name'] . ' (' . number_format($model['price_month'], 0, '', '') . ' грн/мес.)';
                    // return $model['name'] . ' (14 дней бесплатно)';
                 })); ?>
-                <?= $form->field($user, 'newPassword')->passwordInput() ?>
+                <?= $form->field($user, 'password')->passwordInput() ?>
+                <?= $form->field($user, 'password_confirm')->passwordInput() ?>
 
 
                 <div class="form-group row">

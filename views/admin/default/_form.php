@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
 
-$role = Yii::$app->getModule("user")->model("Role");
 
 /**
  * @var yii\web\View $this
@@ -35,8 +34,6 @@ $role = Yii::$app->getModule("user")->model("Role");
     <?= $form->field($user, 'username')->textInput(['maxlength' => 255]) ?>
 
     <?= $form->field($user, 'newPassword')->passwordInput() ?>
-
-    <?= $form->field($user, 'role_id')->dropDownList($role::dropdown()); ?>
 
     <?= $form->field($user, 'status')->dropDownList($user::statusDropdown()); ?>
 

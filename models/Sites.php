@@ -3,6 +3,8 @@
 namespace shopium24\mod\user\models;
 
 
+use app\modules\hosting\components\Api;
+use panix\engine\CMS;
 use Yii;
 use panix\engine\db\ActiveRecord;
 use shopium24\mod\plans\models\Plans;
@@ -37,11 +39,9 @@ class Sites extends ActiveRecord
     public function rules()
     {
         return [
-            //            [['user_id'], 'required'],
-            //            [['user_id'], 'integer'],
-            //            [['create_time', 'update_time'], 'safe'],
             [['subdomain'], 'string', 'max' => 100],
-            [['subdomain','plan_id'], 'required']
+            [['subdomain', 'plan_id'], 'required'],
+            [['subdomain'], 'validateSubdomain'],
         ];
     }
 
@@ -56,6 +56,80 @@ class Sites extends ActiveRecord
     public function getPlan()
     {
         return $this->hasOne(Plans::class, ['id' => 'plan_id']);
+    }
+
+    public function validateSubdomain($attribute)
+    {
+        $site = 'shopium24.com';
+        $api = new Api('hosting_site', 'info', ['site' => $site]);
+        if ($api->response['status'] == 'success') {
+            $domains = [];
+            foreach ($api->response['data'][$site]['hosts'] as $subdomain => $data) {
+                $domains[] = $subdomain;
+            }
+            if (in_array($this->$attribute, $domains)) {
+                $this->addError($attribute, 'Такой поддомен уже есть');
+            }
+        }
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        if ($insert) {
+            $params['site'] = 'shopium24.com';
+            $params['subdomain'] = $this->subdomain;
+
+            $api = new Api('hosting_site', 'host_create', $params);
+
+            if ($api->response['status'] == 'success') {
+                //$response = $api->response['data'];
+                $this->createMailbox();
+                $this->unZip();
+                //unzip files
+
+
+            }
+        }
+
+        parent::afterSave($insert, $changedAttributes);
+    }
+
+    private function unZip()
+    {
+        $file = COMMON_PATH . DIRECTORY_SEPARATOR . 'client.zip';
+        if (file_exists($file)) {
+            $zipFile = new \PhpZip\ZipFile();
+            $zipFile->openFile($file);
+            $extract = $zipFile->extractTo(Yii::getAlias('@app') . '/../'.$this->subdomain);
+        } else {
+            die('no find file zip');
+        }
+    }
+
+    private function createMailbox()
+    {
+        $mailboxPassword = CMS::gen(10);
+        $params['mailbox'] = $this->subdomain . '@shopium24.com';
+        $params['password'] = $mailboxPassword;
+        $params['type'] = 'mailbox';
+        $params['antispam'] = 'medium';
+
+        if (false) {
+            $params['autoresponder']['enabled'] = $model->autoresponder;
+            $params['autoresponder']['title'] = $model->autoresponder_title;
+            $params['autoresponder']['text'] = $model->autoresponder_text;
+        }
+        if (false) {
+            $params['forward'] = explode(',', $model->forward);
+        }
+        $api = new Api('hosting_mailbox', 'create', $params);
+
+        if ($api->response['status'] == 'success') {
+            $response = $api->response['data'];
+
+        } else {
+
+        }
     }
 
     /**

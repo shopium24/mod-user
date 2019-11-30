@@ -2,40 +2,39 @@
 
 namespace shopium24\mod\user\models;
 
+use app\modules\hosting\components\Api;
 use Yii;
 use panix\engine\db\ActiveRecord;
-use yii\web\IdentityInterface;
 use yii\swiftmailer\Mailer;
 use yii\swiftmailer\Message;
 use yii\helpers\Inflector;
 use ReflectionClass;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "tbl_user".
  *
- * @property string    $id
- * @property string    $role_id
- * @property integer   $status
- * @property string    $email
- * @property string    $new_email
- * @property string    $username
- * @property string    $password
- * @property string    $auth_key
- * @property string    $api_key
- * @property string    $login_ip
- * @property string    $login_time
- * @property string    $create_ip
- * @property string    $created_at
- * @property string    $updated_at
- * @property string    $ban_time
- * @property string    $ban_reason
- *
- * @property Sites   $sites
- * @property Role      $role
+ * @property string $id
+ * @property integer $status
+ * @property string $email
+ * @property string $new_email
+ * @property string $username
+ * @property string $password
+ * @property string $auth_key
+ * @property string $api_key
+ * @property string $login_ip
+ * @property string $login_time
+ * @property string $create_ip
+ * @property string $created_at
+ * @property string $updated_at
+ * @property string $ban_time
+ * @property string $ban_reason
+ * @property Sites $sites
  * @property UserKey[] $userKeys
  * @property UserAuth[] $userAuths
  */
-class User extends ActiveRecord implements IdentityInterface {
+class User extends ActiveRecord implements IdentityInterface
+{
 
     const MODULE_ID = 'user';
     /**
@@ -67,7 +66,7 @@ class User extends ActiveRecord implements IdentityInterface {
      * @var string New password confirmation - for reset
      */
     public $newPasswordConfirm;
-
+    public $password_confirm;
     /**
      * @var array Permission cache array
      */
@@ -76,56 +75,49 @@ class User extends ActiveRecord implements IdentityInterface {
     /**
      * @inheritdoc
      */
-    public static function tableName() {
+    public static function tableName()
+    {
         return "{{%user}}";
     }
-    public function getProfileUrl() {
-        return ['/user/profile/view', 'id' => $this->id];
-    }
+
     /**
      * @inheritdoc
      */
-    public function rules() {
-        // set initial rules
-        $rules = [
+    public function rules()
+    {
+        return [
             // general email and username rules
+            [['username'], 'required'],
             [['email', 'username'], 'string', 'max' => 255],
             [['email', 'username'], 'unique'],
             [['email', 'username'], 'filter', 'filter' => 'trim'],
             [['email'], 'email'],
-            [['username'], 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => Yii::t('user/default', '{attribute} can contain only letters, numbers, and "_"')],
+            [['username'], 'email', 'on' => ['register']],
+
+
+
+            //[['username'], 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => Yii::t('user/default', '{attribute} can contain only letters, numbers, and "_"')],
             // password rules
-            [['newPassword'], 'string', 'min' => 3],
-            [['newPassword'], 'filter', 'filter' => 'trim'],
-            [['newPassword'], 'required', 'on' => ['register', 'reset']],
-            [['newPasswordConfirm'], 'required', 'on' => ['reset']],
-            [['newPasswordConfirm'], 'compare', 'compareAttribute' => 'newPassword', 'message' => Yii::t('user/default', 'Passwords do not match')],
+            [['password'], 'string', 'min' => 3],
+            [['password'], 'filter', 'filter' => 'trim'],
+            [['password','password_confirm'], 'required', 'on' => ['register', 'reset']],
+            //[['newPasswordConfirm'], 'required', 'on' => ['reset']],
+            //[['newPasswordConfirm'], 'compare', 'compareAttribute' => 'newPassword', 'message' => Yii::t('user/default', 'Passwords do not match')],
+            [['password_confirm'], 'compare', 'compareAttribute' => 'password', 'message' => Yii::t('user/default', 'Passwords do not match')],
             // account page
-            [['currentPassword'], 'required', 'on' => ['account']],
-            [['currentPassword'], 'validateCurrentPassword', 'on' => ['account']],
-            // admin crud rules
-            //[['role_id', 'status'], 'required', 'on' => ['admin']],
-            //[['role_id', 'status'], 'integer', 'on' => ['admin']],
+            //[['currentPassword'], 'required', 'on' => ['account']],
+            //[['currentPassword'], 'validateCurrentPassword', 'on' => ['account']],
             [['ban_time'], 'integer', 'on' => ['admin']],
             [['ban_reason'], 'string', 'max' => 255, 'on' => 'admin'],
         ];
-
-        // add required rules for email/username depending on module properties
-        $requireFields = ["requireEmail", "requireUsername"];
-        foreach ($requireFields as $requireField) {
-            if (Yii::$app->getModule("user")->$requireField) {
-                $attribute = strtolower(substr($requireField, 7)); // "email" or "username"
-                $rules[] = [$attribute, "required"];
-            }
-        }
-
-        return $rules;
     }
+
 
     /**
      * Validate current password (account page)
      */
-    public function validateCurrentPassword() {
+    public function validateCurrentPassword()
+    {
         if (!$this->verifyPassword($this->currentPassword)) {
             $this->addError("currentPassword", "Current password incorrect");
         }
@@ -134,10 +126,10 @@ class User extends ActiveRecord implements IdentityInterface {
     /**
      * @inheritdoc
      */
-    public function attributeLabels() {
+    public function attributeLabels()
+    {
         return [
             'id' => Yii::t('user/User', 'ID'),
-            //'role_id' => Yii::t('user/User', 'Role ID'),
             'status' => Yii::t('user/User', 'Status'),
             'email' => Yii::t('user/User', 'Email'),
             'new_email' => Yii::t('user/User', 'New Email'),
@@ -161,7 +153,8 @@ class User extends ActiveRecord implements IdentityInterface {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSite() {
+    public function getSite()
+    {
         return $this->hasOne(Sites::class, ['user_id' => 'id']);
     }
 
@@ -169,18 +162,20 @@ class User extends ActiveRecord implements IdentityInterface {
      * @return \yii\db\ActiveQuery
 
     public function getRole() {
-        $role = Yii::$app->getModule("user")->model("Role");
-        return $this->hasOne($role::className(), ['id' => 'role_id']);
-    }*/
-    
-    public function getSession() {
+     * $role = Yii::$app->getModule("user")->model("Role");
+     * return $this->hasOne($role::className(), ['id' => 'role_id']);
+     * }*/
+
+    public function getSession()
+    {
         return $this->hasOne(SessionUser::class, ['user_id' => 'id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserKeys() {
+    public function getUserKeys()
+    {
         $userKey = Yii::$app->getModule("user")->model("UserKey");
         return $this->hasMany($userKey::className(), ['user_id' => 'id']);
     }
@@ -188,42 +183,41 @@ class User extends ActiveRecord implements IdentityInterface {
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUserAuths() {
+    public function getUserAuths()
+    {
         return $this->hasMany(UserAuth::class, ['user_id' => 'id']);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public static function findIdentity($id) {
-        return static::findOne($id);
-    }
 
     /**
      * @inheritdoc
      */
-    public static function findIdentityByAccessToken($token, $type = null) {
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
         return static::findOne(["api_key" => $token]);
     }
 
     /**
      * @inheritdoc
      */
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
     /**
      * @inheritdoc
      */
-    public function getAuthKey() {
+    public function getAuthKey()
+    {
         return $this->auth_key;
     }
 
     /**
      * @inheritdoc
      */
-    public function validateAuthKey($authKey) {
+    public function validateAuthKey($authKey)
+    {
         return $this->auth_key === $authKey;
     }
 
@@ -233,45 +227,48 @@ class User extends ActiveRecord implements IdentityInterface {
      * @param string $password
      * @return bool
      */
-    public function verifyPassword($password) {
+    public function verifyPassword($password)
+    {
         return Yii::$app->security->validatePassword($password, $this->password);
     }
 
     /**
      * @inheritdoc
      */
-    public function beforeSave($insert) {
+    public function beforeSave($insert)
+    {
         // hash new password if set
-        if ($this->newPassword) {
-            $this->password = Yii::$app->security->generatePasswordHash($this->newPassword);
+        if ($this->password) {
+            $this->password = Yii::$app->security->generatePasswordHash($this->password);
         }
 
         // convert ban_time checkbox to date
         if ($this->ban_time) {
             $this->ban_time = date("Y-m-d H:i:s");
         }
-
-        // ensure fields are null so they won't get set as empty string
-        $nullAttributes = ["email", "username", "ban_time", "ban_reason"];
-        foreach ($nullAttributes as $nullAttribute) {
-            $this->$nullAttribute = $this->$nullAttribute ? $this->$nullAttribute : null;
-        }
+        if(!$this->email)
+            $this->email = $this->username;
 
         return parent::beforeSave($insert);
     }
-
+    /**
+     * @inheritdoc
+     */
+    public static function findIdentity($id)
+    {
+        return static::findOne($id);
+    }
     /**
      * Set attributes for registration
      *
-     * @param int    $roleId
      * @param string $userIp
      * @param string $status
      * @return static
      */
-    public function setRegisterAttributes($roleId, $userIp, $status = null) {
+    public function setRegisterAttributes($userIp, $status = null)
+    {
         // set default attributes
         $attributes = [
-           // "role_id" => $roleId,
             "create_ip" => $userIp,
             "auth_key" => Yii::$app->security->generateRandomString(),
             "api_key" => Yii::$app->security->generateRandomString(),
@@ -300,7 +297,8 @@ class User extends ActiveRecord implements IdentityInterface {
      *
      * @return bool True if user set a `new_email`
      */
-    public function checkAndPrepEmailChange() {
+    public function checkAndPrepEmailChange()
+    {
         // check if user is removing email address (only if Module::$requireEmail = false)
         if (trim($this->email) === "") {
             return false;
@@ -327,7 +325,8 @@ class User extends ActiveRecord implements IdentityInterface {
      *
      * @return bool
      */
-    public function updateLoginMeta() {
+    public function updateLoginMeta()
+    {
         // set data
         $this->login_ip = Yii::$app->getRequest()->getUserIP();
         $this->login_time = date("Y-m-d H:i:s");
@@ -341,7 +340,8 @@ class User extends ActiveRecord implements IdentityInterface {
      *
      * @return bool
      */
-    public function confirm() {
+    public function confirm()
+    {
         // update status
         $this->status = static::STATUS_ACTIVE;
 
@@ -358,12 +358,13 @@ class User extends ActiveRecord implements IdentityInterface {
     /**
      * Check if user can do specified $permission
      *
-     * @param string    $permissionName
-     * @param array     $params
-     * @param bool      $allowCaching
+     * @param string $permissionName
+     * @param array $params
+     * @param bool $allowCaching
      * @return bool
      */
-    public function can($permissionName, $params = [], $allowCaching = true) {
+    public function can($permissionName, $params = [], $allowCaching = true)
+    {
         // check for auth manager rbac
         $auth = Yii::$app->getAuthManager();
         if ($auth) {
@@ -388,7 +389,8 @@ class User extends ActiveRecord implements IdentityInterface {
      * @var string $default
      * @return string|int
      */
-    public function getDisplayName($default = "") {
+    public function getDisplayName($default = "")
+    {
         // define possible fields
         $possibleNames = [
             "username",
@@ -412,7 +414,8 @@ class User extends ActiveRecord implements IdentityInterface {
      * @param UserKey $userKey
      * @return int
      */
-    public function sendEmailConfirmation($userKey) {
+    public function sendEmailConfirmation($userKey)
+    {
         /** @var Mailer $mailer */
         /** @var Message $message */
         // modify view path to module views
@@ -424,9 +427,9 @@ class User extends ActiveRecord implements IdentityInterface {
         $user = $this;
         $email = $user->new_email !== null ? $user->new_email : $user->email;
         $subject = Yii::$app->id . " - " . Yii::t("user/default", "Email Confirmation");
-        $message = $mailer->compose('confirmEmail', compact("subject", "user", "profile", "userKey"))
-                ->setTo($email)
-                ->setSubject($subject);
+        $message = $mailer->compose('confirmEmail', compact("subject", "user", "userKey"))
+            ->setTo($email)
+            ->setSubject($subject);
 
         // check for messageConfig before sending (for backwards-compatible purposes)
         if (empty($mailer->messageConfig["from"])) {
@@ -444,7 +447,8 @@ class User extends ActiveRecord implements IdentityInterface {
      *
      * @return array
      */
-    public static function statusDropdown() {
+    public static function statusDropdown()
+    {
         // get data if needed
         static $dropdown;
         if ($dropdown === null) {

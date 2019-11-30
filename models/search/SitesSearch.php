@@ -73,7 +73,6 @@ class SitesSearch extends Sites {
 
         $query->andFilterWhere([
             "{$userTable}.id" => $this->id,
-            'role_id' => $this->role_id,
             'status' => $this->status,
         ]);
 
