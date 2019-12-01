@@ -20,6 +20,7 @@ class m150214_044831_init_user extends Migration
             'id' => Schema::TYPE_PK,
             'status' => Schema::TYPE_SMALLINT . ' not null',
             'email' => Schema::TYPE_STRING . ' null default null',
+            'phone' => $this->string(15)->null(),
             'new_email' => Schema::TYPE_STRING . ' null default null',
             'username' => Schema::TYPE_STRING . ' null default null',
             'password' => Schema::TYPE_STRING . ' null default null',

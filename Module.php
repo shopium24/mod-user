@@ -2,6 +2,7 @@
 
 namespace shopium24\mod\user;
 
+use panix\mod\admin\widgets\sidebar\BackendNav;
 use Yii;
 use yii\base\BootstrapInterface;
 use yii\base\InvalidConfigException;
@@ -116,27 +117,26 @@ class Module extends WebModule implements BootstrapInterface
     {
         return [
             'user' => [
-                'label' => 'Пользователи',
+                'label' => Yii::t('user/default', 'MODULE_NAME'),
                 'icon' => $this->icon,
                 'items' => [
                     [
-                        'label' => Yii::t('user/admin', 'Users'),
-                        "url" => ['/user'],
+                        'label' => Yii::t('user/default', 'MODULE_NAME'),
+                        "url" => ['/admin/user'],
                         'icon' => $this->icon
                     ],
                     [
                         'label' => Yii::t('app', 'SETTINGS'),
-                        "url" => ['/user/settings'],
+                        "url" => ['/admin/user/settings'],
                         'icon' => 'settings'
                     ]
                 ],
             ],
         ];
     }
-
     public function getAdminSidebar()
     {
-        return (new \panix\engine\bootstrap\BackendNav)->findMenu($this->id)['items'];
+        return (new BackendNav())->findMenu($this->id)['items'];
     }
 
     /**
@@ -171,7 +171,7 @@ class Module extends WebModule implements BootstrapInterface
             'version' => '1.0',
             'icon' => 'icon-users',
             'description' => Yii::t('user/default', 'MODULE_DESC'),
-            'url' => ['/user'],
+            'url' => ['/admin/user'],
         ];
     }
 
