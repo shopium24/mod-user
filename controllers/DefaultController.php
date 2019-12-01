@@ -271,20 +271,20 @@ class DefaultController extends WebController
 
             $payment = new Payments;
             $payment->site_id = $site_id;
-            $payment->month = 6;
-            $payment->price = 500;
-            if ($payment->save()) {
+           // $payment->month = 6;
+          //  $payment->price = 500;
+           // if ($payment->save()) {
                 // $site->expire = $site->expire + $payment->term_time;
-                $site->expire = strtotime("+{$payment->month} MONTH", $site->expire);
+              //  $site->expire = strtotime("+{$payment->month} MONTH", $site->expire);
 
 
-                $site->save(false);
-            } else {
-                print_r($payment->errors);
-                die;
-            }
+              //  $site->save(false);
+           // } else {
+            //    print_r($payment->errors);
+            //    die;
+           // }
 
-            return $this->render('payment', ['site' => $site]);
+            return $this->render('payment', ['site' => $site,'payment'=>$payment]);
         } else {
             $this->error404();
         }
