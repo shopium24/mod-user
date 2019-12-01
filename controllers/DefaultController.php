@@ -102,7 +102,7 @@ class DefaultController extends WebController
         $user = new User; //Yii::$app->getModule("user")->model("User", ["scenario" => "register"]);
         $user->setScenario('register');
         $sites = new Sites;
-      //  $sites->setScenario('register');
+        //  $sites->setScenario('register');
 
         $sites->plan_id = Yii::$app->request->get('plan');
 
@@ -138,7 +138,7 @@ class DefaultController extends WebController
                     $guestText = Yii::t("user/default", " - Please check your email to confirm your account");
                 }
                 Yii::$app->session->setFlash("Register-success", $successText . $guestText);
-            }else{
+            } else {
                 CMS::dump($user->errors);
                 CMS::dump($sites->errors);
 
@@ -261,27 +261,31 @@ class DefaultController extends WebController
      */
     public function actionProfile()
     {
-        $user = Yii::$app->user->identity;
-        $this->pageName = Yii::t('user/default','PROFILE');
-        $loadedPost = $user->load(Yii::$app->request->post());
+        if (!Yii::$app->user->isGuest) {
+            $user = Yii::$app->user->identity;
+            $this->pageName = Yii::t('user/default', 'PROFILE');
+            $loadedPost = $user->load(Yii::$app->request->post());
 
-        // validate for ajax request
-        if ($loadedPost && Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($user);
+            // validate for ajax request
+            if ($loadedPost && Yii::$app->request->isAjax) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ActiveForm::validate($user);
+            }
+
+            // validate for normal request
+            if ($loadedPost && $user->validate()) {
+                $user->save(false);
+                Yii::$app->session->setFlash("profile-success", Yii::t("user/default", "Profile updated"));
+                return $this->refresh();
+            }
+
+            // render
+            return $this->render("profile", [
+                'user' => $user,
+            ]);
+        } else {
+            $this->error404();
         }
-
-        // validate for normal request
-        if ($loadedPost && $user->validate()) {
-            $user->save(false);
-            Yii::$app->session->setFlash("profile-success", Yii::t("user/default", "Profile updated"));
-            return $this->refresh();
-        }
-
-        // render
-        return $this->render("profile", [
-            'user' => $user,
-        ]);
     }
 
     /**

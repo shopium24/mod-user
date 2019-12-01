@@ -1,8 +1,11 @@
 <?php
 namespace shopium24\mod\user\migrations;
 
+use shopium24\mod\user\models\Payments;
+use shopium24\mod\user\models\UserAuth;
+use shopium24\mod\user\models\UserKey;
 use yii\db\Schema;
-use yii\db\Migration;
+use panix\engine\db\Migration;
 use shopium24\mod\user\models\User;
 use shopium24\mod\user\models\Sites;
 
@@ -12,9 +15,16 @@ class m150214_044831_init_user extends Migration
     public function safeUp()
     {
         $tableOptions = null;
-        if ($this->db->driverName === 'mysql') {
-            $tableOptions = 'CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB';
-        }
+
+        $this->createTable(Payments::tableName(), [
+            'id' => $this->primaryKey()->unsigned(),
+            'user_id' => $this->integer()->notNull(),
+            'site_id' => $this->integer()->notNull(),
+            'term_time' => $this->integer(),
+            'created_at' => $this->integer(),
+        ]);
+        $this->createIndex('site_id', Payments::tableName(), 'site_id');
+        $this->createIndex('user_id', Payments::tableName(), 'user_id');
 
         $this->createTable(User::tableName(), [
             'id' => $this->primaryKey()->unsigned(),
@@ -37,9 +47,9 @@ class m150214_044831_init_user extends Migration
             'updated_at' => $this->integer(),
             'ban_time' => Schema::TYPE_TIMESTAMP . ' null default null',
             'ban_reason' => Schema::TYPE_STRING . ' null default null',
-        ], $this->tableOptions);
+        ]);
 
-        $this->createTable('{{%user_key}}', [
+        $this->createTable(UserKey::tableName(), [
             'id' => Schema::TYPE_PK,
             'user_id' => Schema::TYPE_INTEGER . ' not null',
             'type' => Schema::TYPE_SMALLINT . ' not null',
@@ -47,35 +57,36 @@ class m150214_044831_init_user extends Migration
             'created_at' => Schema::TYPE_TIMESTAMP . ' null default null',
             'consume_time' => Schema::TYPE_TIMESTAMP . ' null default null',
             'expire_time' => Schema::TYPE_TIMESTAMP . ' null default null',
-        ], $tableOptions);
+        ]);
         $this->createTable(Sites::tableName(), [
             'id' => $this->primaryKey()->unsigned(),
             'user_id' => $this->integer()->unsigned(),
             'plan_id' => $this->tinyInteger()->unsigned(),
             'hosting_account_id'=>$this->string(15),
-            'created_at' => Schema::TYPE_TIMESTAMP . ' null default null',
-            'updated_at' => Schema::TYPE_TIMESTAMP . ' null default null',
+            'expire'=>$this->integer(),
+            'created_at' => $this->integer(),
+            'updated_at' => $this->integer(),
             'subdomain' => $this->string(50)->notNull(),
-        ], $tableOptions);
-        $this->createTable('{{%user_auth}}', [
+        ]);
+        $this->createTable(UserAuth::tableName(), [
             'id' => Schema::TYPE_PK,
             'user_id' => Schema::TYPE_INTEGER . ' not null',
             'provider' => Schema::TYPE_STRING . ' not null',
             'provider_id' => Schema::TYPE_STRING . ' not null',
             'provider_attributes' => Schema::TYPE_TEXT . ' not null',
-            'creatde_at' => Schema::TYPE_TIMESTAMP . ' null default null',
-            'updated_at' => Schema::TYPE_TIMESTAMP . ' null default null'
-        ], $tableOptions);
+            'created_at' => $this->integer(),
+            'updated_at' => $this->integer(),
+        ]);
 
         // add indexes for performance optimization
-        $this->createIndex('{{%user_email}}', '{{%user}}', 'email', true);
-        $this->createIndex('{{%user_username}}', '{{%user}}', 'username', true);
-        $this->createIndex('{{%user_key_key}}', '{{%user_key}}', 'key', true);
-        $this->createIndex('{{%user_auth_provider_id}}', '{{%user_auth}}', 'provider_id', false);
+        $this->createIndex('{{%user_email}}', User::tableName(), 'email', true);
+        $this->createIndex('{{%user_username}}', User::tableName(), 'username', true);
+        $this->createIndex('{{%user_key_key}}', UserKey::tableName(), 'key', true);
+        $this->createIndex('{{%user_auth_provider_id}}', UserAuth::tableName(), 'provider_id', false);
 
         // add foreign keys for data integrity
-        $this->addForeignKey('{{%user_key_user_id}}', '{{%user_key}}', 'user_id', '{{%user}}', 'id');
-        $this->addForeignKey('{{%user_auth_user_id}}', '{{%user_auth}}', 'user_id', '{{%user}}', 'id');
+        $this->addForeignKey('{{%user_key_user_id}}', UserKey::tableName(), 'user_id', User::tableName(), 'id');
+        $this->addForeignKey('{{%user_auth_user_id}}', UserAuth::tableName(), 'user_id', User::tableName(), 'id');
 
 
         // insert admin user: neo/neo
@@ -97,8 +108,9 @@ class m150214_044831_init_user extends Migration
     public function safeDown()
     {
         // drop tables in reverse order (for foreign key constraints)
-        $this->dropTable('{{%user_auth}}');
-        $this->dropTable('{{%user_key}}');
+        $this->dropTable(UserAuth::tableName());
+        $this->dropTable(UserKey::tableName());
+        $this->dropTable(Payments::tableName());
         $this->dropTable(User::tableName());
     }
 

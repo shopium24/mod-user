@@ -17,22 +17,20 @@ use shopium24\mod\plans\models\Plans;
  * @property string $create_time
  * @property string $update_time
  * @property string $full_name
- * @property integer $expire
  * @property integer $hosting_account_id
  *
  * @property User $user
  */
-class Sites extends ActiveRecord
+class Payments extends ActiveRecord
 {
     const MODULE_ID = 'user';
-    const FREE_TIME = 86400 * 14;
 
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return "{{%user_sites}}";
+        return "{{%payments}}";
     }
 
     /**
@@ -50,9 +48,9 @@ class Sites extends ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
+    public function getSite()
     {
-        return $this->hasOne(User::class, ['id' => 'user_id']);
+        return $this->hasOne(Sites::class, ['id' => 'site_id']);
     }
 
     public function getPlan()
@@ -62,7 +60,7 @@ class Sites extends ActiveRecord
 
     public function validateSubdomain($attribute)
     {
-        $site = Yii::$app->params['domain'];
+        $site = 'shopium24.com';
         $api = new Api('hosting_site', 'info', ['site' => $site]);
         if ($api->response['status'] == 'success') {
             $domains = [];
@@ -75,18 +73,10 @@ class Sites extends ActiveRecord
         }
     }
 
-    public function beforeSave($insert)
-    {
-        if ($insert) {
-            $this->expire = time() + self::FREE_TIME;
-        }
-        return parent::beforeSave($insert);
-    }
-
     public function afterSave($insert, $changedAttributes)
     {
-        if ($insert && false) {
-            $params['site'] = Yii::$app->params['domain'];
+        if ($insert) {
+            $params['site'] = 'shopium24.com';
             $params['subdomain'] = $this->subdomain;
 
             $api = new Api('hosting_site', 'host_create', $params);
@@ -95,6 +85,9 @@ class Sites extends ActiveRecord
                 //$response = $api->response['data'];
                 $this->createMailbox();
                 $this->unZip();
+                //unzip files
+
+
             }
         }
 
@@ -107,7 +100,7 @@ class Sites extends ActiveRecord
         if (file_exists($file)) {
             $zipFile = new \PhpZip\ZipFile();
             $zipFile->openFile($file);
-            $extract = $zipFile->extractTo(Yii::getAlias('@app') . '/../' . $this->subdomain);
+            $extract = $zipFile->extractTo(Yii::getAlias('@app') . '/../'.$this->subdomain);
         } else {
             die('no find file zip');
         }
@@ -116,7 +109,7 @@ class Sites extends ActiveRecord
     private function createMailbox()
     {
         $mailboxPassword = CMS::gen(10);
-        $params['mailbox'] = $this->subdomain . '@' . Yii::$app->params['domain'];
+        $params['mailbox'] = $this->subdomain . '@shopium24.com';
         $params['password'] = $mailboxPassword;
         $params['type'] = 'mailbox';
         $params['antispam'] = 'medium';

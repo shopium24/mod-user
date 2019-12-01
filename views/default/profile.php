@@ -41,7 +41,7 @@ use yii\helpers\Html;
                 ],
                 [
                     'label' => 'Платежи',
-                    'content' => $this->render('tabs/_sites', ['user' => $user]),
+                    'content' => $this->render('tabs/_payments', ['user' => $user]),
                     'headerOptions' => [],
                     'options' => ['id' => 'payments'],
                 ],

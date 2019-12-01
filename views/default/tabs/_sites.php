@@ -1,12 +1,14 @@
 <?php
-
+use yii\grid\GridView;
+use yii\helpers\Url;
+use panix\engine\widgets\Pjax;
+use panix\engine\CMS;
+use panix\engine\Html;
 use panix\engine\data\ActiveDataProvider;
 use shopium24\mod\user\models\Sites;
-use yii\grid\GridView;
-use panix\engine\widgets\Pjax;
 
 $dataProvider = new ActiveDataProvider([
-    'query' => Sites::find()->where(['user_id'=>$user->id]),
+    'query' => Sites::find()->where(['user_id' => $user->id]),
     'pagination' => [
         'pageSize' => 20,
     ],
@@ -14,14 +16,37 @@ $dataProvider = new ActiveDataProvider([
 Pjax::begin();
 echo GridView::widget([
     'dataProvider' => $dataProvider,
-    //'itemView' => '_post',
-    'columns'=>[
-        'subdomain',
-        'created_at',
-        'plan.name'
+    'columns' => [
+        [
+            'attribute' => 'subdomain',
+            'format' => 'raw',
+            'contentOptions' => ['class' => 'text-center'],
+            'value' => function ($model) {
+                return Html::a($model->subdomain . '.' . Yii::$app->params['domain'], Url::to('//:'.$model->subdomain . '.' . Yii::$app->params['domain'], true), ['target' => '_blank']);
+            }
+        ],
+        [
+            'attribute' => 'plan_id',
+            'contentOptions' => ['class' => 'text-center'],
+            'value' => function ($model) {
+                return $model->plan->name;
+            }
+        ],
+        [
+            'attribute' => 'created_at',
+            'contentOptions' => ['class' => 'text-center'],
+            'value' => function ($model) {
+                return CMS::date($model->created_at, false);
+            }
+        ],
+        [
+            'attribute' => 'expire',
+            'contentOptions' => ['class' => 'text-center'],
+            'value' => function ($model) {
+                return CMS::date($model->expire);
+            }
+        ]
     ]
 ]);
 Pjax::end();
-foreach ($user->sites as $site){
-    echo $site->subdomain;
-}
+
