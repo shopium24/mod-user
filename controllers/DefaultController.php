@@ -256,6 +256,27 @@ class DefaultController extends WebController
         ]);
     }
 
+    public function actionPayment($site_id)
+    {
+        if (!Yii::$app->user->isGuest) {
+            $site = Sites::find()->where([
+                'user_id' => Yii::$app->user->id,
+                'id' => $site_id
+            ])->one();
+
+            if (!$site)
+                $this->error404();
+
+
+            
+
+
+            return $this->render('payment', ['site' => $site]);
+        } else {
+            $this->error404();
+        }
+    }
+
     /**
      * Profile
      */

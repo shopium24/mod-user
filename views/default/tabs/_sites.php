@@ -45,6 +45,21 @@ echo GridView::widget([
             'value' => function ($model) {
                 return CMS::date($model->expire);
             }
+        ],
+        [
+            'class' => \panix\engine\grid\columns\ActionColumn::class,
+            'template'=>'{payment}',
+
+            'buttons'=>[
+                'payment'=>function ($url, $model) {
+
+                    return Html::a( 'Оплатить', ['/user/payment','site_id'=>$model->id], [
+                        'title' => Yii::t('yii', 'View'),
+                        'class'=>'btn btn-sm btn-outline-success',
+                        'data-pjax' => '0'
+                    ]);
+                }
+            ],
         ]
     ]
 ]);
