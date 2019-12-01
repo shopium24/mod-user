@@ -20,7 +20,8 @@ class m150214_044831_init_user extends Migration
             'id' => $this->primaryKey()->unsigned(),
             'user_id' => $this->integer()->notNull(),
             'site_id' => $this->integer()->notNull(),
-            'term_time' => $this->integer(),
+            'month' => "ENUM('1', '6', '12')",
+            'price' => $this->money(10,2),
             'created_at' => $this->integer(),
         ]);
         $this->createIndex('site_id', Payments::tableName(), 'site_id');

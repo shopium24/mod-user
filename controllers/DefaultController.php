@@ -4,6 +4,7 @@ namespace shopium24\mod\user\controllers;
 
 use panix\engine\CMS;
 use panix\engine\controllers\WebController;
+use shopium24\mod\user\models\Payments;
 use shopium24\mod\user\models\search\SitesSearch;
 use shopium24\mod\user\models\Sites;
 use shopium24\mod\user\models\User;
@@ -268,8 +269,20 @@ class DefaultController extends WebController
                 $this->error404();
 
 
-            
+            $payment = new Payments;
+            $payment->site_id = $site_id;
+            $payment->month = 6;
+            $payment->price = 500;
+            if ($payment->save()) {
+                // $site->expire = $site->expire + $payment->term_time;
+                $site->expire = strtotime("+{$payment->month} MONTH", $site->expire);
 
+
+                $site->save(false);
+            } else {
+                print_r($payment->errors);
+                die;
+            }
 
             return $this->render('payment', ['site' => $site]);
         } else {
