@@ -29,7 +29,7 @@ $form = ActiveForm::begin([
     <input type="hidden" name="ccy" value="UAH"/>
     <input type="hidden" name="merchant" value="152357"/>
     <input type="hidden" name="order" value="s_<?= CMS::gen(111); ?>"/>
-    <input type="hidden" name="details" value="22222"/>
+    <input type="hidden" name="details" value="Оплата аренды на 1 мес."/>
     <input type="hidden" name="ext_details" value="Оптала тарифного плана Basic, на 1 месяц."/>
     <input type="hidden" name="return_url" value="https://shopium24.com/user/payment/result"/>
     <input type="hidden" name="server_url" value="https://shopium24.com/user/payment/process"/>
