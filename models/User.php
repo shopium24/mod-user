@@ -123,39 +123,14 @@ class User extends ActiveRecord implements IdentityInterface
         }
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => Yii::t('user/User', 'ID'),
-            'status' => Yii::t('user/User', 'Status'),
-            'email' => Yii::t('user/User', 'Email'),
-            'new_email' => Yii::t('user/User', 'New Email'),
-            'username' => Yii::t('user/User', 'Username'),
-            'password' => Yii::t('user/User', 'Password'),
-            'auth_key' => Yii::t('user/User', 'Auth Key'),
-            'api_key' => Yii::t('user/User', 'Api Key'),
-            'login_ip' => Yii::t('user/User', 'Login Ip'),
-            'login_time' => Yii::t('user/User', 'Login Time'),
-            'create_ip' => Yii::t('user/User', 'Create Ip'),
-            'created_at' => Yii::t('user/User', 'Create Time'),
-            'updated_at' => Yii::t('user/User', 'Update Time'),
-            'ban_time' => Yii::t('user/User', 'Ban Time'),
-            'ban_reason' => Yii::t('user/User', 'Ban Reason'),
-            'currentPassword' => Yii::t('user/User', 'Current Password'),
-            'newPassword' => Yii::t('user/User', 'New Password'),
-            'newPasswordConfirm' => Yii::t('user/User', 'New Password Confirm'),
-        ];
-    }
+
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSite()
+    public function getSites()
     {
-        return $this->hasOne(Sites::class, ['user_id' => 'id']);
+        return $this->hasMany(Sites::class, ['user_id' => 'id']);
     }
 
     /**

@@ -17,25 +17,28 @@ class m150214_044831_init_user extends Migration
         }
 
         $this->createTable(User::tableName(), [
-            'id' => Schema::TYPE_PK,
+            'id' => $this->primaryKey()->unsigned(),
+            'image' => $this->string(100)->null(),
             'status' => Schema::TYPE_SMALLINT . ' not null',
             'email' => Schema::TYPE_STRING . ' null default null',
-            'phone' => $this->string(15)->null(),
+            'phone' => $this->string(50)->null(),
+            'timezone' => $this->string(10)->null(),
+            'gender' => $this->tinyInteger(1)->null(),
             'new_email' => Schema::TYPE_STRING . ' null default null',
             'username' => Schema::TYPE_STRING . ' null default null',
             'password' => Schema::TYPE_STRING . ' null default null',
             'auth_key' => Schema::TYPE_STRING . ' null default null',
             'api_key' => Schema::TYPE_STRING . ' null default null',
             'subscribe' => $this->boolean()->defaultValue(1),
-            'avatar' => $this->string(50)->null(),
             'login_ip' => Schema::TYPE_STRING . ' null default null',
             'login_time' => Schema::TYPE_TIMESTAMP . ' null default null',
             'create_ip' => Schema::TYPE_STRING . ' null default null',
-            'created_at' => Schema::TYPE_TIMESTAMP . ' null default null',
-            'updated_at' => Schema::TYPE_TIMESTAMP . ' null default null',
+            'created_at' => $this->integer(),
+            'updated_at' => $this->integer(),
             'ban_time' => Schema::TYPE_TIMESTAMP . ' null default null',
             'ban_reason' => Schema::TYPE_STRING . ' null default null',
-        ], $tableOptions);
+        ], $this->tableOptions);
+
         $this->createTable('{{%user_key}}', [
             'id' => Schema::TYPE_PK,
             'user_id' => Schema::TYPE_INTEGER . ' not null',

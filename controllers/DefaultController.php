@@ -3,22 +3,20 @@
 namespace shopium24\mod\user\controllers;
 
 use panix\engine\CMS;
+use panix\engine\controllers\WebController;
 use shopium24\mod\user\models\search\SitesSearch;
 use shopium24\mod\user\models\Sites;
 use shopium24\mod\user\models\User;
 use shopium24\mod\user\models\UserKey;
 use Yii;
-use yii\web\Controller;
 use yii\web\Response;
-
-use yii\filters\VerbFilter;
 use yii\widgets\ActiveForm;
 use panix\mod\rbac\filters\AccessControl;
 
 /**
  * Default controller for User module
  */
-class DefaultController extends Controller
+class DefaultController extends WebController
 {
 
     /**
@@ -264,7 +262,7 @@ class DefaultController extends Controller
     public function actionProfile()
     {
         $user = Yii::$app->user->identity;
-
+        $this->pageName = Yii::t('user/default','PROFILE');
         $loadedPost = $user->load(Yii::$app->request->post());
 
         // validate for ajax request

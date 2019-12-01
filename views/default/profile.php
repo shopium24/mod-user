@@ -1,56 +1,73 @@
 <?php
 
 use yii\helpers\Html;
-use panix\engine\bootstrap\ActiveForm;
+
 
 /**
- * @var yii\web\View $this
+ * @var \panix\mod\plugins\components\View $this
  * @var yii\widgets\ActiveForm $form
  * @var \shopium24\mod\user\models\User $user
  */
 
-$this->title = Yii::t('user/default', 'Profile');
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="container">
-    <div class="row">
-        <div class="col-sm-12">
+
+<div class="row">
+    <div class="col-sm-12">
 
 
-            <div class="user-default-profile">
+        <h1><?= Html::encode($this->context->pageName) ?></h1>
 
-                <h1><?= Html::encode($this->title) ?></h1>
+        <?php if ($flash = Yii::$app->session->getFlash("profile-success")): ?>
 
-                <?php if ($flash = Yii::$app->session->getFlash("profile-success")): ?>
-
-                    <div class="alert alert-success">
-                        <p><?= $flash ?></p>
-                    </div>
-
-                <?php endif; ?>
-
-                <?php $form = ActiveForm::begin([
-                    'id' => 'profile-form',
-                    'options' => ['class' => 'form-horizontal'],
-                    'fieldConfig' => [
-                        'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-7\">{error}</div>",
-                        'labelOptions' => ['class' => 'col-lg-2 control-label'],
-                    ],
-                    'enableAjaxValidation' => true,
-                ]); ?>
-
-                <?= $form->field($user, 'username') ?>
-                <?= $form->field($user, 'phone') ?>
-
-                <div class="form-group">
-                    <div class="col-lg-offset-2 col-lg-10">
-                        <?= Html::submitButton(Yii::t('user/default', 'Update'), ['class' => 'btn btn-primary']) ?>
-                    </div>
-                </div>
-
-                <?php ActiveForm::end(); ?>
-
+            <div class="alert alert-success">
+                <p><?= $flash ?></p>
             </div>
-        </div>
+
+        <?php endif; ?>
+
+        <?php
+        echo \panix\engine\bootstrap\Tabs::widget([
+            'items' => [
+                [
+                    'label' => 'Профиль',
+                    'content' => $this->render('tabs/_profile', ['user' => $user]),
+                    'active' => true
+                ],
+                [
+                    'label' => 'Мои сайты',
+                    'content' => $this->render('tabs/_sites', ['user' => $user]),
+                    'headerOptions' => [],
+                    'options' => ['id' => 'sites'],
+                ],
+                [
+                    'label' => 'Платежи',
+                    'content' => $this->render('tabs/_sites', ['user' => $user]),
+                    'headerOptions' => [],
+                    'options' => ['id' => 'payments'],
+                ],
+                [
+                    'label' => 'Dropdown',
+                    'items' => [
+                        [
+                            'label' => 'DropdownA',
+                            'content' => 'DropdownA, Anim pariatur cliche...',
+                        ],
+                        [
+                            'label' => 'DropdownB',
+                            'content' => 'DropdownB, Anim pariatur cliche...',
+                        ],
+                        [
+                            'label' => 'External Link',
+                            'url' => 'http://www.example.com',
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+        ?>
+
+
     </div>
 </div>
+
+
