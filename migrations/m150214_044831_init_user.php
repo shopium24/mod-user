@@ -22,6 +22,8 @@ class m150214_044831_init_user extends Migration
             'site_id' => $this->integer()->notNull(),
             'month' => "ENUM('1', '6', '12')",
             'price' => $this->money(10,2),
+            'payment_system' => $this->string(255)->notNull(),
+            'paid' => $this->boolean()->defaultValue(0),
             'created_at' => $this->integer(),
         ]);
         $this->createIndex('site_id', Payments::tableName(), 'site_id');
