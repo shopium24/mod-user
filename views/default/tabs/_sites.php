@@ -48,9 +48,17 @@ echo GridView::widget([
         ],
         [
             'class' => \panix\engine\grid\columns\ActionColumn::class,
-            'template'=>'{payment}',
+            'template'=>'{edit} {payment}',
 
             'buttons'=>[
+                'edit'=>function ($url, $model) {
+
+                    return Html::a( 'Настройки', ['/user/site/edit','id'=>$model->id], [
+                        'title' => Yii::t('yii', 'Edit'),
+                        'class'=>'btn btn-sm btn-outline-success',
+                        'data-pjax' => '0'
+                    ]);
+                },
                 'payment'=>function ($url, $model) {
 
                     return Html::a( 'Оплатить', ['/user/payment','site_id'=>$model->id], [
@@ -58,7 +66,7 @@ echo GridView::widget([
                         'class'=>'btn btn-sm btn-outline-success',
                         'data-pjax' => '0'
                     ]);
-                }
+                },
             ],
         ]
     ]

@@ -85,19 +85,36 @@ class Sites extends ActiveRecord
 
     public function afterSave($insert, $changedAttributes)
     {
-        if ($insert && false) {
+        $isCreateHost = false;
+        $isCreateDb = false;
+        if ($insert) {
+            // Create subdomain
             $params['site'] = Yii::$app->params['domain'];
             $params['subdomain'] = $this->subdomain;
 
             $api = new Api('hosting_site', 'host_create', $params);
 
             if ($api->response['status'] == 'success') {
-                //$response = $api->response['data'];
+                $isCreateHost = true;
+            }
+
+
+            // Create Database
+            $params = [];
+            $params['name'] = 'c' . $this->user_id;
+            $params['collation'] = 'utf8_general_ci';
+            $params['user_create'] = true;
+            $api = new Api('hosting_database', 'database_create', $params);
+            if ($api->response['status'] == 'success') {
+                $isCreateDb = true;
+            }
+
+
+            if ($isCreateHost && $isCreateDb) {
                 $this->createMailbox();
                 $this->unZip();
             }
         }
-
         parent::afterSave($insert, $changedAttributes);
     }
 

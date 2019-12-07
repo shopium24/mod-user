@@ -268,7 +268,11 @@ class Module extends WebModule implements BootstrapInterface
             'prefix' => $this->id,
             'rules' => [
                 '<controller:(admin|copy|auth)>' => '<controller>',
-                '<controller:(admin|copy|auth|payment)>/<action:\w+>' => '<controller>/<action>',
+                '<controller:(admin|copy|auth|payment)>/<action:[0-9a-zA-Z_\-]+>' => '<controller>/<action>',
+
+                '<controller:(site)>/<action:[0-9a-zA-Z_\-]+>/<id:\d+>' => '<controller>/<action>',
+                '<controller:(site)>/<action:[0-9a-zA-Z_\-]+>' => '<controller>/<action>',
+
                 '<action:\w+>' => 'default/<action>',
             ],
         ]);
