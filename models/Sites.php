@@ -163,7 +163,9 @@ class Sites extends ActiveRecord
                 'password' => $password,
                 'tablePrefix' => CMS::gen(5) . '_'
             ]);
+            $connection->open();
             $connection->import($file);
+            $connection->close();
         } else {
             die('no find file sql');
         }
