@@ -5,6 +5,7 @@ namespace shopium24\mod\user\models;
 
 use app\modules\hosting\components\Api;
 use panix\engine\CMS;
+use panix\engine\db\Connection;
 use Yii;
 use panix\engine\db\ActiveRecord;
 use shopium24\mod\plans\models\Plans;
@@ -88,6 +89,7 @@ class Sites extends ActiveRecord
         $isCreateHost = false;
         $isCreateDb = false;
         $isChangePwdDb = false;
+        $db_password = CMS::gen(25);
         if ($insert) {
             // Create subdomain
             $params['site'] = Yii::$app->params['domain'];
@@ -111,8 +113,8 @@ class Sites extends ActiveRecord
 
                 // Chnage Db user password
                 $params = [];
-                $params['user']='s24_c' . $this->user_id;
-                $params['password'] = CMS::gen(10);
+                $params['user'] = 's24_c' . $this->user_id;
+                $params['password'] = $db_password;
                 $api = new Api('hosting_database', 'user_password', $params);
                 if ($api->response['status'] == 'success') {
                     $isChangePwdDb = true;
@@ -125,7 +127,8 @@ class Sites extends ActiveRecord
             if ($isCreateHost && $isCreateDb && $isChangePwdDb) {
                 $this->createMailbox();
                 $this->unZip();
-            }else{
+                $this->insertDb('s24_c' . $this->user_id, $db_password);
+            } else {
                 var_dump($isCreateHost);
                 var_dump($isCreateDb);
                 var_dump($isChangePwdDb);
@@ -144,6 +147,25 @@ class Sites extends ActiveRecord
             $extract = $zipFile->extractTo(Yii::getAlias('@app') . '/../' . $this->subdomain);
         } else {
             die('no find file zip');
+        }
+    }
+
+
+    private function insertDb($user, $password)
+    {
+        $file = COMMON_PATH . DIRECTORY_SEPARATOR . 'client.sql';
+        if (file_exists($file)) {
+            $connection = new Connection([
+                'dsn' => strtr('mysql:host=s24.mysql.tools;dbname={db_name}', [
+                    '{db_name}' => $user,
+                ]),
+                'username' => $user,
+                'password' => $password,
+                'tablePrefix' => CMS::gen(5) . '_'
+            ]);
+            $connection->import($file);
+        } else {
+            die('no find file sql');
         }
     }
 
