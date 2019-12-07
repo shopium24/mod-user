@@ -101,9 +101,8 @@ class Sites extends ActiveRecord
 
 
             // Create Database
-
             $params = [];
-            $params['name'] = 's24_c' . $this->user_id;
+            $params['name'] = 'c' . $this->user_id;
             $params['collation'] = 'utf8_general_ci';
             $params['user_create'] = true;
             $api = new Api('hosting_database', 'database_create', $params);
