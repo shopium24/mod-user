@@ -87,6 +87,7 @@ class Sites extends ActiveRecord
     {
         $isCreateHost = false;
         $isCreateDb = false;
+        $isChangePwdDb = false;
         if ($insert) {
             // Create subdomain
             $params['site'] = Yii::$app->params['domain'];
@@ -100,17 +101,29 @@ class Sites extends ActiveRecord
 
 
             // Create Database
+
             $params = [];
-            $params['name'] = 'c' . $this->user_id;
+            $params['name'] = 's24_c' . $this->user_id;
             $params['collation'] = 'utf8_general_ci';
             $params['user_create'] = true;
             $api = new Api('hosting_database', 'database_create', $params);
             if ($api->response['status'] == 'success') {
                 $isCreateDb = true;
+
+                // Chnage Db user password
+                $params = [];
+                $params['user']='s24_c' . $this->user_id;
+                $params['password'] = CMS::gen(10);
+                $api = new Api('hosting_database', 'user_password', $params);
+                if ($api->response['status'] == 'success') {
+                    $isChangePwdDb = true;
+                }
+
+
             }
 
 
-            if ($isCreateHost && $isCreateDb) {
+            if ($isCreateHost && $isCreateDb && $isChangePwdDb) {
                 $this->createMailbox();
                 $this->unZip();
             }
