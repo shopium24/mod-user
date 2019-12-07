@@ -126,6 +126,11 @@ class Sites extends ActiveRecord
             if ($isCreateHost && $isCreateDb && $isChangePwdDb) {
                 $this->createMailbox();
                 $this->unZip();
+            }else{
+                var_dump($isCreateHost);
+                var_dump($isCreateDb);
+                var_dump($isChangePwdDb);
+                die('no valid');
             }
         }
         parent::afterSave($insert, $changedAttributes);
