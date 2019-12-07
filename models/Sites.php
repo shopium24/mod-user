@@ -9,6 +9,7 @@ use panix\engine\db\Connection;
 use Yii;
 use panix\engine\db\ActiveRecord;
 use shopium24\mod\plans\models\Plans;
+use yii\helpers\FileHelper;
 
 /**
  * This is the model class for table "tbl_sites".
@@ -144,7 +145,9 @@ class Sites extends ActiveRecord
         if (file_exists($file)) {
             $zipFile = new \PhpZip\ZipFile();
             $zipFile->openFile($file);
-            $extract = $zipFile->extractTo(Yii::getAlias('@app') . '/../' . $this->subdomain);
+            $subDomainPath = Yii::getAlias('@app') . '/../' . $this->subdomain;
+            FileHelper::createDirectory($subDomainPath, $mode = 0750, $recursive = true);
+            $extract = $zipFile->extractTo($subDomainPath);
         } else {
             die('no find file zip');
         }
