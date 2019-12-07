@@ -100,7 +100,7 @@ class Sites extends ActiveRecord
 
             if ($api->response['status'] == 'success') {
                 $isCreateHost = true;
-                Yii::debug('create host '.$this->subdomain,'hosting');
+                Yii::debug('Create host '.$this->subdomain,'Hosting/Api');
             }
 
 
@@ -112,7 +112,7 @@ class Sites extends ActiveRecord
             $api = new Api('hosting_database', 'database_create', $params);
             if ($api->response['status'] == 'success') {
                 $isCreateDb = true;
-                Yii::debug('create db '.$params['name'].' for '.$this->subdomain,'hosting');
+                Yii::debug('Create db '.$params['name'].' for '.$this->subdomain,'Hosting/Api');
                 // Chnage Db user password
                 $params = [];
                 $params['user'] = 's24_c' . $this->user_id;
@@ -120,7 +120,7 @@ class Sites extends ActiveRecord
                 $api = new Api('hosting_database', 'user_password', $params);
                 if ($api->response['status'] == 'success') {
                     $isChangePwdDb = true;
-                    Yii::debug('create db pwd '.$params['user'].' for '.$this->subdomain,'hosting');
+                    Yii::info('Update db password '.$params['user'].' for '.$this->subdomain,'Hosting/Api');
                 }
 
 
@@ -150,7 +150,7 @@ class Sites extends ActiveRecord
             $subDomainPath = Yii::getAlias('@app') . '/../' . $this->subdomain;
             FileHelper::createDirectory($subDomainPath, $mode = 0750, $recursive = true);
             $extract = $zipFile->extractTo($subDomainPath);
-            Yii::debug('Extract files '.$this->subdomain,'hosting');
+            Yii::debug('Extract files '.$this->subdomain,'Hosting/Api');
         } else {
             die('no find file zip');
         }
@@ -171,7 +171,7 @@ class Sites extends ActiveRecord
             ]);
             $connection->open();
             $connection->import($file);
-            Yii::debug('Import sql file '.$user,'hosting');
+            Yii::debug('Import sql file '.$user,'Hosting/Api');
             $connection->close();
         } else {
             die('no find file sql');
