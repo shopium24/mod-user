@@ -71,7 +71,7 @@ class User extends ActiveRecord implements IdentityInterface
      * @var array Permission cache array
      */
     protected $_access = [];
-
+    public $verifyCode;
     /**
      * @inheritdoc
      */
@@ -85,31 +85,41 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function rules()
     {
-        return [
-            // general email and username rules
-            [['username'], 'required'],
-            [['email', 'username'], 'string', 'max' => 255],
-            [['email', 'username'], 'unique'],
-            [['email', 'username'], 'filter', 'filter' => 'trim'],
-            [['email'], 'email'],
-            [['username'], 'email', 'on' => ['register']],
+        $configApp = Yii::$app->settings->get('app');
+        if ($configApp->captcha_class && Yii::$app->user->isGuest) {
+            if ($configApp->captcha_class == '\panix\engine\widgets\recaptcha\v2\ReCaptcha') {
+                $rules[] = ['verifyCode', 'panix\engine\widgets\recaptcha\v2\ReCaptchaValidator', 'on' => ['register']];
+            } else if ($configApp->captcha_class == '\panix\engine\widgets\recaptcha\v3\ReCaptcha') {
+                $rules[] = ['verifyCode', 'panix\engine\widgets\recaptcha\v3\ReCaptchaValidator', 'on' => ['register']];
+            } else { // \yii\captcha\Captcha
+                $rules[] = ['verifyCode', 'captcha', 'on' => ['register']];
+                $rules[] = [['verifyCode'], 'required', 'on' => ['register']];
+            }
+        }
+                    // general email and username rules
+            $rules[]=[['username'], 'required'];
+            $rules[]=[['email', 'username'], 'string', 'max' => 255];
+            $rules[]=[['email', 'username'], 'unique'];
+            $rules[]=[['email', 'username'], 'filter', 'filter' => 'trim'];
+            $rules[]=[['email'], 'email'];
+            $rules[]=[['username'], 'email', 'on' => ['register']];
 
 
 
             //[['username'], 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => Yii::t('user/default', '{attribute} can contain only letters, numbers, and "_"')],
             // password rules
-            [['password'], 'string', 'min' => 3],
-            [['password'], 'filter', 'filter' => 'trim'],
-            [['password','password_confirm'], 'required', 'on' => ['register', 'reset']],
+            $rules[]=[['password'], 'string', 'min' => 3];
+            $rules[]=[['password'], 'filter', 'filter' => 'trim'];
+            $rules[]=[['password','password_confirm'], 'required', 'on' => ['register', 'reset']];
             //[['newPasswordConfirm'], 'required', 'on' => ['reset']],
             //[['newPasswordConfirm'], 'compare', 'compareAttribute' => 'newPassword', 'message' => Yii::t('user/default', 'Passwords do not match')],
-            [['password_confirm'], 'compare', 'compareAttribute' => 'password', 'message' => Yii::t('user/default', 'Passwords do not match')],
+            $rules[]=[['password_confirm'], 'compare', 'compareAttribute' => 'password', 'message' => Yii::t('user/default', 'Passwords do not match')];
             // account page
             //[['currentPassword'], 'required', 'on' => ['account']],
             //[['currentPassword'], 'validateCurrentPassword', 'on' => ['account']],
-            [['ban_time'], 'integer', 'on' => ['admin']],
-            [['ban_reason'], 'string', 'max' => 255, 'on' => 'admin'],
-        ];
+            $rules[]=[['ban_time'], 'integer', 'on' => ['admin']];
+            $rules[]=[['ban_reason'], 'string', 'max' => 255, 'on' => 'admin'];
+
     }
 
 

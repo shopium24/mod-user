@@ -56,12 +56,18 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 {error}{hint}'])->dropDownList(\yii\helpers\ArrayHelper::map(\shopium24\mod\plans\models\Plans::find()->all(), 'id', function ($model) {
                     return $model['name'] . ' (' . number_format($model['price_month'], 0, '', '') . ' грн/мес.)';
-                   // return $model['name'] . ' (14 дней бесплатно)';
+                    // return $model['name'] . ' (14 дней бесплатно)';
                 })); ?>
                 <?= $form->field($user, 'password')->passwordInput() ?>
                 <?= $form->field($user, 'password_confirm')->passwordInput() ?>
 
-
+                <?php
+                if (Yii::$app->settings->get('app', 'captcha_class') && Yii::$app->user->isGuest) { ?>
+                    <?php
+                    $captchaConfig = \panix\mod\admin\models\SettingsForm::captchaConfig();
+                    echo $form->field($user, 'verifyCode')->widget(Yii::$app->settings->get('app', 'captcha_class'), $captchaConfig[Yii::$app->settings->get('app', 'captcha_class')]);
+                }
+                ?>
                 <div class="form-group row">
                     <div class="col-lg-offset-2 col-lg-10">
                         <?= Html::submitButton(Yii::t('user/default', 'REGISTER'), ['class' => 'btn btn-primary']) ?>
