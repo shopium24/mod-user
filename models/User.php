@@ -72,6 +72,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     protected $_access = [];
     public $verifyCode;
+
     /**
      * @inheritdoc
      */
@@ -85,6 +86,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function rules()
     {
+        $rules = [];
         $configApp = Yii::$app->settings->get('app');
         if ($configApp->captcha_class && Yii::$app->user->isGuest) {
             if ($configApp->captcha_class == '\panix\engine\widgets\recaptcha\v2\ReCaptcha') {
@@ -96,30 +98,29 @@ class User extends ActiveRecord implements IdentityInterface
                 $rules[] = [['verifyCode'], 'required', 'on' => ['register']];
             }
         }
-                    // general email and username rules
-            $rules[]=[['username'], 'required'];
-            $rules[]=[['email', 'username'], 'string', 'max' => 255];
-            $rules[]=[['email', 'username'], 'unique'];
-            $rules[]=[['email', 'username'], 'filter', 'filter' => 'trim'];
-            $rules[]=[['email'], 'email'];
-            $rules[]=[['username'], 'email', 'on' => ['register']];
+        // general email and username rules
+        $rules[] = [['username'], 'required'];
+        $rules[] = [['email', 'username'], 'string', 'max' => 255];
+        $rules[] = [['email', 'username'], 'unique'];
+        $rules[] = [['email', 'username'], 'filter', 'filter' => 'trim'];
+        $rules[] = [['email'], 'email'];
+        $rules[] = [['username'], 'email', 'on' => ['register']];
 
 
-
-            //[['username'], 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => Yii::t('user/default', '{attribute} can contain only letters, numbers, and "_"')],
-            // password rules
-            $rules[]=[['password'], 'string', 'min' => 3];
-            $rules[]=[['password'], 'filter', 'filter' => 'trim'];
-            $rules[]=[['password','password_confirm'], 'required', 'on' => ['register', 'reset']];
-            //[['newPasswordConfirm'], 'required', 'on' => ['reset']],
-            //[['newPasswordConfirm'], 'compare', 'compareAttribute' => 'newPassword', 'message' => Yii::t('user/default', 'Passwords do not match')],
-            $rules[]=[['password_confirm'], 'compare', 'compareAttribute' => 'password', 'message' => Yii::t('user/default', 'Passwords do not match')];
-            // account page
-            //[['currentPassword'], 'required', 'on' => ['account']],
-            //[['currentPassword'], 'validateCurrentPassword', 'on' => ['account']],
-            $rules[]=[['ban_time'], 'integer', 'on' => ['admin']];
-            $rules[]=[['ban_reason'], 'string', 'max' => 255, 'on' => 'admin'];
-
+        //[['username'], 'match', 'pattern' => '/^[A-Za-z0-9_]+$/u', 'message' => Yii::t('user/default', '{attribute} can contain only letters, numbers, and "_"')],
+        // password rules
+        $rules[] = [['password'], 'string', 'min' => 3];
+        $rules[] = [['password'], 'filter', 'filter' => 'trim'];
+        $rules[] = [['password', 'password_confirm'], 'required', 'on' => ['register', 'reset']];
+        //[['newPasswordConfirm'], 'required', 'on' => ['reset']],
+        //[['newPasswordConfirm'], 'compare', 'compareAttribute' => 'newPassword', 'message' => Yii::t('user/default', 'Passwords do not match')],
+        $rules[] = [['password_confirm'], 'compare', 'compareAttribute' => 'password', 'message' => Yii::t('user/default', 'Passwords do not match')];
+        // account page
+        //[['currentPassword'], 'required', 'on' => ['account']],
+        //[['currentPassword'], 'validateCurrentPassword', 'on' => ['account']],
+        $rules[] = [['ban_time'], 'integer', 'on' => ['admin']];
+        $rules[] = [['ban_reason'], 'string', 'max' => 255, 'on' => 'admin'];
+        return $rules;
     }
 
 
@@ -132,7 +133,6 @@ class User extends ActiveRecord implements IdentityInterface
             $this->addError("currentPassword", "Current password incorrect");
         }
     }
-
 
 
     /**
@@ -231,11 +231,12 @@ class User extends ActiveRecord implements IdentityInterface
         if ($this->ban_time) {
             $this->ban_time = date("Y-m-d H:i:s");
         }
-        if(!$this->email)
+        if (!$this->email)
             $this->email = $this->username;
 
         return parent::beforeSave($insert);
     }
+
     /**
      * @inheritdoc
      */
@@ -243,6 +244,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return static::findOne($id);
     }
+
     /**
      * Set attributes for registration
      *
